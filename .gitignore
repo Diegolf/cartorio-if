@@ -1,6 +1,7 @@
 cartorio.old.txt
 cartorio.txt
 blockchain/src/contract/.contrato_compilado.js
+blockchain/src/contract/.dados.js
 */node_modules
 
 /.pnp

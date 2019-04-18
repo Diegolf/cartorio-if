@@ -32,6 +32,10 @@ contract Cartorio{
     
     address public administrador;
     
+    event certificadoAdicionado(bytes32 id);
+    
+    event apelidoModificado(string novoApelido, uint data);
+    
     modifier apenasAutorizados(){
         require(autorizados[msg.sender].ativo == true);
         _;
@@ -67,7 +71,7 @@ contract Cartorio{
         autorizadosEnderecos.push(0x00);
     }
     
-    // Dado um passo gera um hash para armazenar os dados do certificado
+    // Dado um passo gera um hash que será o índice para armazenar os dados do certificado
     function geraIndice(uint passo) view private returns(bytes32){
         return keccak256(abi.encodePacked(block.number, now, msg.data, passo));
     }
@@ -100,7 +104,7 @@ contract Cartorio{
     
     // Adiciona um novo certificado.
     function adicionarCertificado(string nome, string email, string titulo, uint dataDoCurso, 
-        uint duracao, string nomeDoInstrutor) apenasAutorizadosOuAdiministrador public {
+        uint duracao, string nomeDoInstrutor) apenasAutorizadosOuAdiministrador public{
             
             uint passo = 1;
             do{
@@ -121,6 +125,7 @@ contract Cartorio{
                 dataInvalidacao: 0,
                 enderecoInvalidador: 0x00
             });
+        emit certificadoAdicionado(id);
     }
     
     // Torna um certificado inválido. Armazena a data e o endereço de quem realizou a transação. Vale lembrar que apenas o administrador ou quem registrou o certificado tem permissão para invalidá-lo.
@@ -164,6 +169,7 @@ contract Cartorio{
     // Modifica o nome de um autorizado
     function modificaNomeAutorizado(address endereco, string apelido) apenasAdministrador autorizadoExiste(endereco) public {
         autorizados[endereco].apelido = apelido;
+        emit apelidoModificado(apelido, now);
     }
     
     // Retorna todos os indices de cada certificado já cadastrado
