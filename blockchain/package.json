@@ -1,0 +1,18 @@
+{
+  "name": "cartorio-if-contract-manager",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "compile": "node src/contract/compile.js",
+    "deploy": "node src/contract/deploy.js",
+    "test": "mocha"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "solc": "^0.4.25",
+    "truffle-hdwallet-provider": "^1.0.6",
+    "web3": "^1.0.0-beta.52"
+  }
+}
