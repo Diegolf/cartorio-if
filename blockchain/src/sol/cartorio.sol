@@ -32,7 +32,7 @@ contract Cartorio{
     
     address public administrador;
     
-    event certificadoAdicionado(bytes32 id);
+    event certificadoAdicionado(bytes32 id, string titulo);
     
     event apelidoModificado(string novoApelido, uint data);
     
@@ -98,7 +98,7 @@ contract Cartorio{
     }
     
     // Remove a permissão de uma conta de realizar transações no contrato
-    function removerAutorizado(address endereco) apenasAdministrador public {
+    function removerAutorizado(address endereco) apenasAdministrador autorizadoExiste(endereco) public {
         autorizados[endereco].ativo = false;
     }
     
@@ -125,7 +125,7 @@ contract Cartorio{
                 dataInvalidacao: 0,
                 enderecoInvalidador: 0x00
             });
-        emit certificadoAdicionado(id);
+        emit certificadoAdicionado(id, titulo);
     }
     
     // Torna um certificado inválido. Armazena a data e o endereço de quem realizou a transação. Vale lembrar que apenas o administrador ou quem registrou o certificado tem permissão para invalidá-lo.
