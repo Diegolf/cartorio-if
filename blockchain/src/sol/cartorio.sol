@@ -173,7 +173,7 @@ contract Cartorio{
     }
     
     // Retorna todos os indices de cada certificado já cadastrado
-    function getCertificadosIndices() apenasAutorizadosOuAdiministrador view public returns(bytes32[]){
+    function getCertificadosIndices() apenasAutorizadosOuAdiministrador view public returns(bytes32[] indices){
         return certificadosIndices;
     }
     
@@ -181,5 +181,9 @@ contract Cartorio{
     function getAutorizadosEnderecos() view public returns(address[]){
         return autorizadosEnderecos;
     }
-    
+
+    function isAutorizado(address endereco) view public returns(bool isAutorizado){
+        return autorizados[endereco].ativo || endereco == administrador;
+    }
+
 }
