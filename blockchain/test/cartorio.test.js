@@ -10,12 +10,14 @@ let cartorio;
 let certificados = {};
 let certificadoAdicionadoConta1;
 let admAddress;
+let rootAddress;
 
 // Executado uma vez antes do "describe"
 before(async () => {
     // Pega uma lista de accounts de forma assíncrona
     accounts = await web3.eth.getAccounts();
     admAddress = accounts[0];
+    rootAddress = accounts[8];
 
     // Use one of those account to deploy the contract
     // Ensina a web3 quais métodos o contrato Inbox tem (pela abi)
@@ -25,7 +27,7 @@ before(async () => {
         .deploy({ data: bytecode })
 
         // Instrui a web3 à enviar uma transação que cria esse contrato
-        .send({ from: admAddress, gas: '2000000' });
+        .send({ from: rootAddress, gas: '2000000' });
 
 });
 
@@ -35,9 +37,63 @@ describe('Testes', () => {
         assert(cartorio.options.address);
     });
 
-    it('O endereço da conta que fez o deploy foi armazenado como administrador', async () => {
-        const administrador = await cartorio.methods.administrador().call();
-        assert(administrador == admAddress);
+    it('O endereço da conta que fez o deploy foi armazenado como root', async () => {
+        const root = await cartorio.methods.root().call();
+        assert(root == rootAddress);
+    });
+
+    it('Root pode modificar o administrador', async () => {
+
+        await cartorio.methods.setAdministrador(admAddress).send({ from: rootAddress, gas: '2000000' });
+
+        const adm = await cartorio.methods.administrador().call({ from: rootAddress });
+
+        assert(adm == admAddress);
+    });
+
+    it('Outras contas não podem modificar o administrador', async () => {
+
+        try{
+            await cartorio.methods.setAdministrador(admAddress).send({ from: accounts[2], gas: '2000000' });
+            assert(false);
+        
+        }catch(e){
+            assert(e.results[e.hashes[0]].error == 'revert');
+        }
+
+    });
+
+    it('Root pode modificar a senha geral', async () => {
+        const senha = web3.utils.sha3('Senha');
+
+        await cartorio.methods.setSenha(senha).send({ from: rootAddress, gas: '2000000' });
+
+        const senhaArmazenada = await cartorio.methods.getSenha().call({ from: admAddress });
+
+        assert(senha == senhaArmazenada);
+
+    });
+
+    it('Administrador pode modificar a senha geral', async () => {
+        const senha = web3.utils.sha3('NovaSenha');
+
+        await cartorio.methods.setSenha(senha).send({ from: admAddress, gas: '2000000' });
+
+        const senhaArmazenada = await cartorio.methods.getSenha().call({ from: admAddress });
+
+        assert(senha == senhaArmazenada);
+    });
+    
+    it('Outras contas não podem modificar a senha geral', async () => {
+        const senha = web3.utils.sha3('SenhaOutras');
+
+        try{
+            await cartorio.methods.setSenha(senha).send({ from: accounts[3], gas: '2000000' });
+            assert(false);
+        }catch(e){
+            assert(e.results[e.hashes[0]].error == 'revert');
+        }
+
     });
 
     it('Administrador pode adicionar uma conta como autorizada', async () => {
@@ -225,12 +281,12 @@ describe('Testes', () => {
     it('Evento de modificar o nome de um autorizado é executado corretamente', async () => {
 
         const novoNome = 'Outro nome';
-        
+
         await cartorio.methods.modificaNomeAutorizado(accounts[1], novoNome)
-            .send({from: admAddress, gas: '2000000'});
-        
+            .send({ from: admAddress, gas: '2000000' });
+
         const autorizado1 = await cartorio.methods.getAutorizado(accounts[1])
-            .call({from: admAddress});
+            .call({ from: admAddress });
 
         assert(autorizado1.apelido == novoNome);
     });
@@ -238,13 +294,13 @@ describe('Testes', () => {
     it('Contas aleatórias não podem modificar o nome de um autorizado', async () => {
 
         const novoNome = 'Outro nome 2';
-        
+
         try {
             await cartorio.methods.modificaNomeAutorizado(accounts[1], novoNome)
-                .send({from: accounts[5], gas: '2000000'});
-            
+                .send({ from: accounts[5], gas: '2000000' });
+
             assert(false);
-        }catch(e){
+        } catch (e) {
             assert(e.results[e.hashes[0]].error == 'revert');
         }
     });

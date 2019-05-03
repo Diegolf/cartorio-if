@@ -30,11 +30,16 @@ contract Cartorio{
     mapping(address => Autorizado) private autorizados; // Endereço das pessoas autorizadas a adicionarem novos certificados
     address[] private autorizadosEnderecos; // Necessário para consulta e listagem de todos os autorizados;
     
-    address public administrador;
+    address public root; // Endereço da conta que tem apenas a função de mudar a senha e o administrador
+    
+    address public administrador; // Administrador do contrato
+    string private senhaGeral; // Senha 
     
     event certificadoAdicionado(bytes32 id, string titulo);
     
     event apelidoModificado(string novoApelido, uint data);
+    
+    event administradorModificado(address novoAdministrador, uint data);
     
     modifier apenasAutorizados(){
         require(autorizados[msg.sender].ativo == true);
@@ -66,11 +71,37 @@ contract Cartorio{
         _;
     }
     
+    modifier apenasRoot(){
+        require(msg.sender == root);
+        _;
+    }
+    
+    modifier apenasRootOuAdminsitrador(){
+        require(msg.sender == root || msg.sender == administrador);
+        _;
+    }
+    
     constructor() public{
-        administrador = msg.sender;
+        root = msg.sender;
         autorizadosEnderecos.push(0x00);
     }
     
+    // Modifica o adminsitrador do contrato, gera um evento
+    function setAdministrador(address endereco) apenasRoot public {
+        administrador = endereco;  
+        emit administradorModificado(endereco, now);
+    } 
+    
+    // Retorna a senha para poder verificar no front-end
+    function getSenha() apenasAdministrador public view returns(string senha) {
+        return senhaGeral;
+    }
+    
+    // Modifica a senha geral
+    function setSenha(string senha) apenasRootOuAdminsitrador public {
+        senhaGeral = senha;
+    }
+        
     // Dado um passo gera um hash que será o índice para armazenar os dados do certificado
     function geraIndice(uint passo) view private returns(bytes32){
         return keccak256(abi.encodePacked(block.number, now, msg.data, passo));
@@ -182,7 +213,7 @@ contract Cartorio{
         return autorizadosEnderecos;
     }
 
-    function isAutorizado(address endereco) view public returns(bool isAutorizado){
+    function isAutorizado(address endereco) view public returns(bool autorizado){
         return autorizados[endereco].ativo || endereco == administrador;
     }
 
