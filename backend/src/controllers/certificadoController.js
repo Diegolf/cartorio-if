@@ -16,7 +16,8 @@ class CertificadoController{
 
     async certificados(req, res){
 
-        const certificados = Certificado.find({}).skip(req.body.from).limit(10).sort({createdAt: -1})
+        const certificados = await Certificado.find({}).skip(req.query.from ? parseInt(req.query.from) : 0)
+            .limit(10).sort({createdAt: -1})
 
         return res.json(certificados);
     }
