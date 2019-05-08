@@ -214,7 +214,7 @@ contract Cartorio{
     }
 
     function isAutorizado(address endereco) view public returns(bool autorizado){
-        return autorizados[endereco].ativo || endereco == administrador;
+        return autorizados[endereco].ativo;
     }
 
 }
