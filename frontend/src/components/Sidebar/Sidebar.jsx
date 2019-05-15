@@ -52,7 +52,7 @@ class Sidebar extends React.Component {
         <div className="sidebar-wrapper" ref="sidebar">
           <Nav>
             {this.props.routes.map((prop, key) => {
-              if (prop.redirect || prop.hidden) return null;
+              if (prop.redirect || prop.hidden || (prop.root && this.props.tipoConta !== 'root')) return null;
               return (
                 <li
                   className={

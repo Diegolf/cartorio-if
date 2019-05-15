@@ -25,6 +25,12 @@ class MetamaskLoggedOut extends React.Component {
     this.props.history.goBack();
   }
 
+  async onDesbloquearAcesso(){
+    await window.ethereum.enable();
+    this.props.history.replace('/');
+    window.location.reload();
+  }
+
   render() {
     return (
       <div className="content">
@@ -40,7 +46,12 @@ class MetamaskLoggedOut extends React.Component {
                   <span className="blockquote-primary d-text18">
                     Metamask está instalado, mas provalmente está deslogado ou bloqueado. Desbloqueie o Metamask e atualize a página, ou clique aqui para continuar como visitante
                   </span>
-                  <Button color="primary" onClick={this.onContinuarComoVisitante.bind(this)} round>Continuar como visitante</Button>
+                  <div className="d-row">
+                    { window.ethereum && ( 
+                      <Button color="info" onClick={this.onDesbloquearAcesso.bind(this)} round>Desbloquear acesso</Button>
+                    )}
+                    <Button color="info" onClick={this.onContinuarComoVisitante.bind(this)} round>Continuar como visitante</Button>
+                  </div>
                 </div>
               </CardBody>
             </Card>

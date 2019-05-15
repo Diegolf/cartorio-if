@@ -65,7 +65,6 @@ class Dashboard extends React.Component {
     }
 
     this.setState({ cartorio, tipoLogin: tipoLogin, conta: contas[0], tipoConta });
-    //this.history.push()
 
   }
   componentWillUnmount() {
@@ -79,7 +78,6 @@ class Dashboard extends React.Component {
       this.refs.mainPanel.scrollTop = 0;
       document.scrollingElement.scrollTop = 0;
     }
-    console.log(this.state);
   }
   handleActiveClick = (color) => {
     this.setState({ activeColor: color });
@@ -95,12 +93,13 @@ class Dashboard extends React.Component {
       <div className="wrapper">
         <Sidebar
           {...this.props}
+          tipoConta={this.state.tipoConta}
           routes={dashboardRoutes}
           bgColor={this.state.backgroundColor}
           activeColor={this.state.activeColor}
         />
         <div className="main-panel" ref="mainPanel">
-          <Header {...this.props} />
+          <Header {...this.props} tipoConta={this.state.tipoConta} />
           <Switch>
             {dashboardRoutes.map((prop, key) => {
               if (prop.pro) {

@@ -7,8 +7,16 @@ import Maps from "views/Maps/Maps.jsx";
 import UserPage from "views/UserPage/UserPage.jsx";
 
 import MetamaskLoggedOut from "views/MetamaskLoggedOut/MetamaskLoggedOut.jsx"
+import RootPainel from "views/RootPainel/RootPainel.jsx"
 
 var dashRoutes = [
+  {
+    root: true,
+    path: "/root",
+    name: "Painel do Root",
+    icon: "nc-icon nc-laptop",
+    component: RootPainel
+  },
   {
     path: "/dashboard",
     name: "Dashboard",

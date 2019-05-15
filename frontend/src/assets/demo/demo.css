@@ -201,5 +201,22 @@
 }
 
 .d-marginlr {
-  margin: 0 0 0 0;
+  margin: 0 12px 0 12px;
+}
+
+.d-marginb{
+  margin-bottom: 12px;
+}
+
+.d-row{
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  flex-direction: row;
+  text-align: center;
+  padding-top: 10px;
+}
+
+.d-text-center{
+  text-align: center;
 }
