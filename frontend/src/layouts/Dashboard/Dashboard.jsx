@@ -8,6 +8,8 @@ import Footer from "components/Footer/Footer.jsx";
 import Sidebar from "components/Sidebar/Sidebar.jsx";
 import FixedPlugin from "components/FixedPlugin/FixedPlugin.jsx";
 
+import NotificationAlert from "react-notification-alert";
+
 import dashboardRoutes from "routes/dashboard.jsx";
 
 import { abi, enderecoContrato } from 'contracts/cartorio.js';
@@ -85,9 +87,39 @@ class Dashboard extends React.Component {
   handleBgClick = (color) => {
     this.setState({ backgroundColor: color });
   }
-  continuarComoVisitante(){
-    this.setState({visitante: true});
+  continuarComoVisitante() {
+    this.setState({ visitante: true });
   }
+
+  // place= "tl", "tc", "tr", "bl", "bc", "br" # type: "primary", "info", "success", "danger", "warning"
+  notify({ message, time = 7, place = "tr", type = "info", icon = "nc-icon nc-bell-55" }) { // 
+    let options = {
+      place: place,
+      message: (
+        <div>
+          {message}
+        </div>
+      ),
+      type: type,
+      icon: icon,
+      autoDismiss: time
+    };
+    this.refs.notificationAlert.notificationAlert(options);
+    const tamanhoarray = this.refs.notificationAlert.state.notifyTR.length;
+    const id = this.refs.notificationAlert.state.notifyTR[tamanhoarray - 1].key;
+    return id;
+  }
+
+  notifyDismiss(id) {
+    const notificacoes = this.refs.notificationAlert.state.notifyTR;
+    for (let c = 0; c < notificacoes.length; c++) {
+      if (notificacoes[c].key === id) {
+        notificacoes[c].props.toggle();
+        return;
+      }
+    }
+  }
+
   render() {
     return (
       <div className="wrapper">
@@ -100,6 +132,7 @@ class Dashboard extends React.Component {
         />
         <div className="main-panel" ref="mainPanel">
           <Header {...this.props} tipoConta={this.state.tipoConta} />
+          <NotificationAlert ref="notificationAlert" />
           <Switch>
             {dashboardRoutes.map((prop, key) => {
               if (prop.pro) {
@@ -110,13 +143,18 @@ class Dashboard extends React.Component {
               }
               return (
                 <Route path={prop.path}
-                  render={({history}) => 
-                    <prop.component 
-                      history={history} 
+                  render={({ history }) =>
+                    <prop.component
+                      web3={web3}
+                      history={history}
                       {...this.state}
-                      funcoes={prop.path === '/metamaskloggedout' ? {continuarComoVisitante:this.continuarComoVisitante.bind(this)} : ''}
+                      funcoes={{
+                        continuarComoVisitante: (prop.path === '/metamaskloggedout' ? this.continuarComoVisitante.bind(this) : ''),
+                        notify: this.notify.bind(this),
+                        notifyDismiss: this.notifyDismiss.bind(this)
+                      }}
                     />}
-                  key={key} 
+                  key={key}
                 />
               );
             })}

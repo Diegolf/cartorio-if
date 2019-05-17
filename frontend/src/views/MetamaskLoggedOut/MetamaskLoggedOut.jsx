@@ -9,7 +9,6 @@ import {
   Col
 } from "reactstrap";
 
-
 import Button from "components/CustomButton/CustomButton.jsx";
 
 class MetamaskLoggedOut extends React.Component {
@@ -25,7 +24,7 @@ class MetamaskLoggedOut extends React.Component {
     this.props.history.goBack();
   }
 
-  async onDesbloquearAcesso(){
+  async onDesbloquearAcesso() {
     await window.ethereum.enable();
     this.props.history.replace('/');
     window.location.reload();
@@ -47,7 +46,7 @@ class MetamaskLoggedOut extends React.Component {
                     Metamask está instalado, mas provalmente está deslogado ou bloqueado. Desbloqueie o Metamask e atualize a página, ou clique aqui para continuar como visitante
                   </span>
                   <div className="d-row">
-                    { window.ethereum && ( 
+                    {window.ethereum && (
                       <Button color="info" onClick={this.onDesbloquearAcesso.bind(this)} round>Desbloquear acesso</Button>
                     )}
                     <Button color="info" onClick={this.onContinuarComoVisitante.bind(this)} round>Continuar como visitante</Button>

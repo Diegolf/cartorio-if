@@ -7,10 +7,10 @@ import {
   CardHeader,
   Input,
   Row,
-  Col
+  Col,
+  FormFeedback
 } from "reactstrap";
 
-import NotificationAlert from "react-notification-alert";
 import Button from "components/CustomButton/CustomButton.jsx";
 
 class RootPainel extends React.Component {
@@ -18,11 +18,14 @@ class RootPainel extends React.Component {
     super(props);
     this.state = {
       enderecoNovoAdm: '',
+      enderecoNovoAdmError: false,
+      enderecoNovoAdmMessage: '',
       senhaInput: '',
-      senhaInputConfirmacao: ''
-    };
+      senhaInputConfirmacao: '',
+      senhaInputConfirmacaoError: false,
+      senhaInputConfirmacaoMessage: ''
 
-    // web3.utils.isAddress()
+    };
   }
 
   componentDidMount() { // For acessado pelo sidebar
@@ -37,9 +40,53 @@ class RootPainel extends React.Component {
     }
   }*/
 
-  onEnderecoNovoAdmButtonClick() {
-    console.log(this.state.enderecoNovoAdm);
-    this.notify('Mensagem');
+  async onEnderecoNovoAdmButtonClick() {
+    const endereco = this.state.enderecoNovoAdm;
+
+    if (!endereco) {
+      this.props.funcoes.notify({
+        message: 'Informe o endereço da conta',
+        icon: 'nc-icon nc-simple-remove',
+        type: 'danger'
+      });
+      this.setState({ enderecoNovoAdmError: true, enderecoNovoAdmMessage: 'Informe o endereço da conta' });
+      return;
+    }
+
+    if (!this.props.web3.utils.isAddress(endereco)) {
+      this.props.funcoes.notify({
+        message: 'O endereço informado é inválido',
+        icon: 'nc-icon nc-simple-remove',
+        type: 'danger'
+      });
+      this.setState({ enderecoNovoAdmError: true, enderecoNovoAdmMessage: 'O endereço informado é inválido' });
+      return;
+    }
+    this.setState({ enderecoNovoAdmError: false, enderecoNovoAdmMessage: '' });
+    const notificacaoID = this.props.funcoes.notify({
+      message: 'Transação enviada, aguardando confirmação ...',
+      icon: 'nc-icon nc-delivery-fast',
+      type: 'info',
+      time: 200
+    });
+
+    try {
+      await this.props.cartorio.methods.setAdministrador(endereco).send({ from: this.props.conta, gas: '2000000' });
+      this.props.funcoes.notify({
+        message: 'Transação confirmada ! O administrador foi modificado. ',
+        icon: 'nc-icon nc-check-2',
+        type: 'success',
+        time: 15
+      });
+    } catch (e) {
+      this.props.funcoes.notify({
+        message: 'Transação cancelada ou correu um erro na Ethereum, verifique o console para mais informações',
+        icon: 'nc-icon nc-simple-remove',
+        type: 'danger'
+      });
+      console.log(e);
+    }
+    this.props.funcoes.notifyDismiss(notificacaoID);
   }
 
   onNovaSenhaButtonClick() {
@@ -47,28 +94,20 @@ class RootPainel extends React.Component {
     console.log('Senha confirmação: ', this.state.senhaInputConfirmacao);
   }
 
-  // place= "tl", "tc", "tr", "bl", "bc", "br" # type: "primary", "info", "success", "danger", "warning"
-  notify(message, time=7, place="tr", type="info", icon="nc-icon nc-bell-55") { // 
-    
-    var options = {};
-    options = {
-      place: place,
-      message: (
-        <div>
-          {message}
-        </div>
-      ),
-      type: type,
-      icon: icon,
-      autoDismiss: time
-    };
-    this.refs.notificationAlert.notificationAlert(options);
+  senhasIguais(value) {
+    const senha = this.state.senhaInput;
+
+    if (senha !== value) {
+      this.setState({ senhaInputConfirmacaoError: true, senhaInputConfirmacaoMessage: 'As senhas não coincidem' });
+    } else {
+      this.setState({ senhaInputConfirmacaoError: false, senhaInputConfirmacaoMessage: '' });
+    }
+
   }
 
   render() {
     return (
       <div className="content">
-        <NotificationAlert ref="notificationAlert" />
         <Row>
           <Col md={12}>
             <Card>
@@ -82,11 +121,13 @@ class RootPainel extends React.Component {
                     Digite o endereço da chave pública do novo administrador
                   </span>
                   <Input
+                    invalid={this.state.enderecoNovoAdmError}
                     value={this.state.enderecoNovoAdm}
                     onChange={e => this.setState({ enderecoNovoAdm: e.target.value })}
                     placeholder="Endereço Hexadecimal Ex: 0x123abc"
                     className="d-text-center"
                   />
+                  <FormFeedback> {this.state.enderecoNovoAdmMessage} </FormFeedback>
                   <Button color="info" onClick={this.onEnderecoNovoAdmButtonClick.bind(this)} round>Modificar Adminsitrador</Button>
                 </div>
               </CardBody>
@@ -113,12 +154,15 @@ class RootPainel extends React.Component {
                     placeholder="Nova senha"
                   />
                   <Input
+                    invalid={this.state.senhaInputConfirmacaoError}
+                    valid={!this.state.senhaInputConfirmacaoError && this.state.senhaInputConfirmacao !== ''}
                     value={this.state.senhaInputConfirmacao}
-                    onChange={e => this.setState({ senhaInputConfirmacao: e.target.value })}
+                    onChange={e => { this.setState({ senhaInputConfirmacao: e.target.value }); this.senhasIguais(e.target.value) }}
                     type="password"
                     className="d-text-center"
                     placeholder="Confirmar nova senha"
                   />
+                  <FormFeedback> {this.state.senhaInputConfirmacaoMessage} </FormFeedback>
                   <Button color="info" onClick={this.onNovaSenhaButtonClick.bind(this)} round>Modificar senha</Button>
                 </div>
               </CardBody>

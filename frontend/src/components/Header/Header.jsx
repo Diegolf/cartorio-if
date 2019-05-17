@@ -126,7 +126,7 @@ class Header extends React.Component {
             <NavbarBrand href="/">{this.getBrand()}</NavbarBrand>
           </div>
           <span className="text-info">
-            {this.props.tipoConta.charAt(0).toUpperCase() + this.props.tipoConta.slice(1)}
+            <strong>{this.props.tipoConta.charAt(0).toUpperCase() + this.props.tipoConta.slice(1)}</strong>
           </span>
         </Container>
       </Navbar>
