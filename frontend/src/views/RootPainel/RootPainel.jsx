@@ -24,7 +24,6 @@ class RootPainel extends React.Component {
       senhaInputConfirmacao: '',
       senhaInputConfirmacaoError: false,
       senhaInputConfirmacaoMessage: ''
-
     };
   }
 
@@ -89,9 +88,54 @@ class RootPainel extends React.Component {
     this.props.funcoes.notifyDismiss(notificacaoID);
   }
 
-  onNovaSenhaButtonClick() {
-    console.log('Senha: ', this.state.senhaInput);
-    console.log('Senha confirmação: ', this.state.senhaInputConfirmacao);
+  async onNovaSenhaButtonClick() {
+    const senha = this.state.senhaInput;
+    const senhaConfirmacao = this.state.senhaInputConfirmacao;
+
+    if (!senha || !senhaConfirmacao) {
+      this.props.funcoes.notify({
+        message: 'Informe a senha e a confirmação',
+        icon: 'nc-icon nc-simple-remove',
+        type: 'danger'
+      });
+      return;
+    }
+
+    if (senha !== senhaConfirmacao) {
+      this.props.funcoes.notify({
+        message: 'A senha e a confirmação não coincidem',
+        icon: 'nc-icon nc-simple-remove',
+        type: 'danger'
+      });
+      return;
+    }
+
+    const notificacaoID = this.props.funcoes.notify({
+      message: 'Transação enviada, aguardando confirmação ...',
+      icon: 'nc-icon nc-delivery-fast',
+      type: 'info',
+      time: 200
+    });
+
+    try {
+      await this.props.cartorio.methods.setSenha(this.props.web3.utils.keccak256(senha)).send({ from: this.props.conta, gas: '2000000' });
+      this.props.funcoes.notify({
+        message: 'Transação confirmada ! O a senhda do administrador foi modificada. ',
+        icon: 'nc-icon nc-check-2',
+        type: 'success',
+        time: 15
+      });
+    } catch (e) {
+      this.props.funcoes.notify({
+        message: 'Transação cancelada ou correu um erro na Ethereum, verifique o console para mais informações',
+        icon: 'nc-icon nc-simple-remove',
+        type: 'danger'
+      });
+      console.log(e);
+    }
+
+    this.props.funcoes.notifyDismiss(notificacaoID);
+
   }
 
   senhasIguais(value) {

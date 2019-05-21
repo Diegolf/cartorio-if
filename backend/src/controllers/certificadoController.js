@@ -1,7 +1,7 @@
 const Certificado = require('../models/Certificado');
 
-class CertificadoController{
-    async armazenar(req, res){
+class CertificadoController {
+    async armazenar(req, res) {
         const certificado = await Certificado.create({
             nome: req.body.nome,
             email: req.body.email,
@@ -14,10 +14,16 @@ class CertificadoController{
         return res.send(certificado);
     }
 
-    async certificados(req, res){
+    async certificados(req, res) {
+        const resultadosPorBusca = 8;
 
-        const certificados = await Certificado.find({}).skip(req.query.from ? parseInt(req.query.from) : 0)
-            .limit(10).sort({createdAt: -1})
+        let pagina = 0;
+        try {
+            pagina = parseInt(req.query.page); // req.body.page?
+        } catch (e) { }
+
+        const certificados = await Certificado.find({}).skip(pagina * resultadosPorBusca)
+            .limit(resultadosPorBusca).sort({ createdAt: -1 })
 
         return res.json(certificados);
     }

@@ -12,7 +12,7 @@ import NotificationAlert from "react-notification-alert";
 
 import dashboardRoutes from "routes/dashboard.jsx";
 
-import { abi, enderecoContrato } from 'contracts/cartorio.js';
+import { abi, enderecoContrato } from "contracts/cartorio.js";
 import { web3, tipoLogin } from "services/web3.js";
 
 var ps;
@@ -143,6 +143,7 @@ class Dashboard extends React.Component {
               }
               return (
                 <Route path={prop.path}
+                  exact
                   render={({ history }) =>
                     <prop.component
                       web3={web3}
@@ -151,7 +152,7 @@ class Dashboard extends React.Component {
                       funcoes={{
                         continuarComoVisitante: (prop.path === '/metamaskloggedout' ? this.continuarComoVisitante.bind(this) : ''),
                         notify: this.notify.bind(this),
-                        notifyDismiss: this.notifyDismiss.bind(this)
+                        notifyDismiss: this.notifyDismiss.bind(this),
                       }}
                     />}
                   key={key}

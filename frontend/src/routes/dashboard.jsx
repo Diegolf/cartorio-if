@@ -8,6 +8,7 @@ import UserPage from "views/UserPage/UserPage.jsx";
 
 import MetamaskLoggedOut from "views/MetamaskLoggedOut/MetamaskLoggedOut.jsx"
 import RootPainel from "views/RootPainel/RootPainel.jsx"
+import AdministratorPainel from "views/AdministratorPainel/AdministratorPainel.jsx";
 
 var dashRoutes = [
   {
@@ -15,6 +16,20 @@ var dashRoutes = [
     path: "/root",
     name: "Painel do Root",
     icon: "nc-icon nc-laptop",
+    component: RootPainel
+  },
+  {
+    administrador: true,
+    path: "/administrador",
+    name: "Painel do ADM",
+    icon: "nc-icon nc-laptop",
+    component: AdministratorPainel
+  },
+  {
+    autorizado: true,
+    path: "/assinar-certificado",
+    name: "Assinar Certificado",
+    icon: "nc-icon nc-touch-id",
     component: RootPainel
   },
   {
