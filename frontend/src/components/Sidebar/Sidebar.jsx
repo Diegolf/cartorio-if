@@ -54,7 +54,7 @@ class Sidebar extends React.Component {
             {this.props.routes.map((prop, key) => {
               if (prop.redirect || prop.hidden || (prop.root && this.props.tipoConta !== 'root') ||
                 (prop.administrador && this.props.tipoConta !== 'administrador') ||
-                (prop.autorizado && this.props.tipoConta !== 'autorizado')
+                (prop.autorizado && (this.props.tipoConta !== 'autorizado' || this.props.tipoConta !== 'administrador'))
               )
                 return null;
               return (

@@ -61,7 +61,9 @@ class RootPainel extends React.Component {
       this.setState({ enderecoNovoAdmError: true, enderecoNovoAdmMessage: 'O endereço informado é inválido' });
       return;
     }
+
     this.setState({ enderecoNovoAdmError: false, enderecoNovoAdmMessage: '' });
+    
     const notificacaoID = this.props.funcoes.notify({
       message: 'Transação enviada, aguardando confirmação ...',
       icon: 'nc-icon nc-delivery-fast',
@@ -85,6 +87,7 @@ class RootPainel extends React.Component {
       });
       console.log(e);
     }
+
     this.props.funcoes.notifyDismiss(notificacaoID);
   }
 

@@ -92,7 +92,7 @@ class Dashboard extends React.Component {
   }
 
   // place= "tl", "tc", "tr", "bl", "bc", "br" # type: "primary", "info", "success", "danger", "warning"
-  notify({ message, time = 7, place = "tr", type = "info", icon = "nc-icon nc-bell-55" }) { // 
+  notify({ message, time = 6, place = "tr", type = "info", icon = "nc-icon nc-bell-55" }) { // 
     let options = {
       place: place,
       message: (
