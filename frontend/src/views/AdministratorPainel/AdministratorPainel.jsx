@@ -9,17 +9,21 @@ import {
   Input,
   Row,
   Col,
+  Table,
   FormFeedback
 } from "reactstrap";
 
 import Button from "components/CustomButton/CustomButton.jsx";
-import AutorizadosList from "components/AutorizadosList/AutorizadosList.jsx";
+import AutorizadosTableList from "components/AutorizadosList/AutorizadosTableList.jsx";
 
 class AutorizadoinistratorPainel extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      autorizadosIds: [],
+      autorizados: {
+        ativos: [],
+        desativados: []
+      },
       apelidoNovoAutorizado: '',
       apelidoNovoAutorizadoError: false,
       enderecoNovoAutorizado: '',
@@ -33,18 +37,38 @@ class AutorizadoinistratorPainel extends React.Component {
       this.props.history.replace('/');
     }
 
-    let autorizados = await this.props.cartorio.methods.getAutorizadosEnderecos().call({from: this.props.conta});
-    autorizados.shift();
+    if (this.props.cartorio) {
+      let autorizadosIds = await this.props.cartorio.methods.getAutorizadosEnderecos().call({ from: this.props.conta });
+      autorizadosIds.shift();
 
-    this.setState({autorizadosIds: autorizados})
+      let autorizados = { ativos: [], desativados: [] };
 
+      for (let c in autorizadosIds) {
+        const at = await this.props.cartorio.methods.getAutorizado(autorizadosIds[c]).call({ from: this.props.conta });
+
+        if (at.ativo) {
+          autorizados.ativos.push({
+            conta: autorizadosIds[c],
+            apelido: at.apelido,
+          });
+        } else {
+          autorizados.desativados.push({
+            conta: autorizadosIds[c],
+            apelido: at.apelido,
+          });
+        }
+
+      };
+
+      this.setState({ autorizados: autorizados })
+    }
   }
 
   async onEnderecoNovoAutorizadoButtonClick() {
     const endereco = this.state.enderecoNovoAutorizado;
     const apelido = this.state.apelidoNovoAutorizado;
 
-    if (!apelido){
+    if (!apelido) {
       this.props.funcoes.notify({
         message: 'Informe o apelido do autorizado',
         icon: 'nc-icon nc-simple-remove',
@@ -80,7 +104,7 @@ class AutorizadoinistratorPainel extends React.Component {
 
     const notificacaoID = this.props.funcoes.notify({
       message: 'Transação enviada, aguardando confirmação ...',
-      icon: 'nc-icon nc-delivery-fast',
+      icon: false,
       type: 'info',
       time: 200
     });
@@ -93,6 +117,15 @@ class AutorizadoinistratorPainel extends React.Component {
         type: 'success',
         time: 15
       });
+
+      let autorizados = this.state.autorizados;
+      autorizados.ativos.push({
+        conta: endereco,
+        apelido: apelido
+      });
+
+      this.setState({autorizados, enderecoNovoAutorizado: '', apelidoNovoAutorizado: ''});
+
     } catch (e) {
       this.props.funcoes.notify({
         message: 'Transação cancelada ou correu um erro na Ethereum, verifique o console para mais informações',
@@ -114,11 +147,19 @@ class AutorizadoinistratorPainel extends React.Component {
                 <CardTitle>Lista de Autorizados</CardTitle>
                 <hr />
               </CardHeader>
-              <Container className="d-container">
-                {this.state.autorizadosIds.map( endereco => {
-                  return <AutorizadosList autorizado={endereco} conta={this.props.conta} cartorio={this.props.cartorio} />
-                })}
-              </Container>
+              <CardBody className="d-container">
+                {(!this.state.autorizados.ativos.length && !this.state.autorizados.desativados.length) ?
+                  <h3 className="d-center">Nenhum autorizado cadastrado</h3>
+                  : (
+                    <AutorizadosTableList
+                      web3={this.props.web3}
+                      cartorio={this.props.cartorio}
+                      conta={this.props.conta}
+                      autorizados={this.state.autorizados}
+                      funcoes={this.props.funcoes}
+                    />
+                  )}
+              </CardBody>
             </Card>
           </Col>
         </Row>
@@ -138,7 +179,7 @@ class AutorizadoinistratorPainel extends React.Component {
                     invalid={this.state.apelidoNovoAutorizadoError}
                     value={this.state.apelidoNovoAutorizado}
                     onChange={e => this.setState({ apelidoNovoAutorizado: e.target.value })}
-                    placeholder="Ex: Diretoria de Extensão, Nome Próprio"
+                    placeholder="Ex: Setor, Nome Próprio"
                     className="d-text-center d-marginb"
                   />
                   <FormFeedback> {this.state.apelidoNovoAutorizadoMessage} </FormFeedback>

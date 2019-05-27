@@ -235,25 +235,75 @@
   text-align: center;
 }
 
-.d-toggle-card {
-  background-color: #26c6da;
-  color: #333;
-  width: 100%;
-  padding: 5px;
-  border-radius: 3px;
-  margin: 0 0 3px 0; 
+.d-left {
+  float: left;
 }
 
-.d-toggle-body {
-  background-color: #FFF;
-
+.d-right {
+  float: right;
 }
 
 .d-container {
   width: 100%;
   margin-bottom: 10px;
+  padding: 0 25px 10px 25px !important;
 }
 
 .d-padding5 {
   padding: 5px;
+}
+
+.d-alert-painel {
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  flex-direction: row;
+}
+
+.d-icon-g {
+  font-weight: bold;
+  font-size: 15px;
+  cursor: pointer;
+  border: solid 1px;
+  border-radius: 50%;
+  padding: 4px;
+  box-shadow: 0px 0px 2px;
+}
+
+.d-icon-g:hover {
+  box-shadow: 0px 0px 9px;
+}
+
+.d-dual-ring-message {
+  padding-left: 15px;
+  left: -30px;
+  border-left: solid 1px;
+  position: relative;
+}
+
+.d-dual-ring {
+  left: -45px;
+  width: 23px;
+  height: 23px;
+  position: relative;
+}
+
+.d-dual-ring:after {
+  content: " ";
+  display: block;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 5px solid #fff;
+  border-color: #fff transparent #fff transparent;
+  animation: lds-dual-ring 1.2s linear infinite;
+}
+
+@keyframes lds-dual-ring {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }

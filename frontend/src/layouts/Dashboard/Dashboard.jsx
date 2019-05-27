@@ -29,6 +29,7 @@ class Dashboard extends React.Component {
       tipoConta: '', // root, administrador, autorizado, visitante
       visitante: false
     }
+
   }
 
   async componentDidMount() {
@@ -95,13 +96,18 @@ class Dashboard extends React.Component {
   notify({ message, time = 6, place = "tr", type = "info", icon = "nc-icon nc-bell-55" }) { // 
     let options = {
       place: place,
-      message: (
+      message: icon ? (
         <div>
           {message}
         </div>
+      ) : (
+        <div className="d-alert-painel">
+          <div className="d-dual-ring"></div>
+          <div className="d-dual-ring-message">{message}</div>
+        </div>
       ),
       type: type,
-      icon: icon,
+      icon: icon ? icon : '',
       autoDismiss: time
     };
     this.refs.notificationAlert.notificationAlert(options);

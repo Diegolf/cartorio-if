@@ -66,7 +66,7 @@ class RootPainel extends React.Component {
     
     const notificacaoID = this.props.funcoes.notify({
       message: 'Transação enviada, aguardando confirmação ...',
-      icon: 'nc-icon nc-delivery-fast',
+      icon: false,
       type: 'info',
       time: 200
     });
@@ -115,7 +115,7 @@ class RootPainel extends React.Component {
 
     const notificacaoID = this.props.funcoes.notify({
       message: 'Transação enviada, aguardando confirmação ...',
-      icon: 'nc-icon nc-delivery-fast',
+      icon: false,
       type: 'info',
       time: 200
     });
@@ -123,7 +123,7 @@ class RootPainel extends React.Component {
     try {
       await this.props.cartorio.methods.setSenha(this.props.web3.utils.keccak256(senha)).send({ from: this.props.conta, gas: '2000000' });
       this.props.funcoes.notify({
-        message: 'Transação confirmada ! O a senhda do administrador foi modificada. ',
+        message: 'Transação confirmada ! O a senha do administrador foi modificada.',
         icon: 'nc-icon nc-check-2',
         type: 'success',
         time: 15
