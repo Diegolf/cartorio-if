@@ -153,6 +153,7 @@ class Dashboard extends React.Component {
                   render={({ history }) =>
                     <prop.component
                       web3={web3}
+                      pageName={prop.name}
                       history={history}
                       {...this.state}
                       funcoes={{

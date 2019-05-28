@@ -27,6 +27,10 @@ class RootPainel extends React.Component {
     };
   }
 
+  componentWillMount(){
+    document.title = "Cartório IF - " + this.props.pageName ;
+  }
+
   componentDidMount() { // For acessado pelo sidebar
     if (this.props.tipoConta !== 'root') {
       this.props.history.replace('/');

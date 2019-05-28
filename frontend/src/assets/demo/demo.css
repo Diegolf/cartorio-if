@@ -200,6 +200,12 @@
   text-align: center;
 }
 
+.d-collapse-icon {
+  border-left: 1px solid;
+  margin: 0;
+  padding: 0 4px 0 9px;
+}
+
 .d-box-40 {
   width: 40px;
   height: 40px;
@@ -258,6 +264,28 @@
   justify-content: left;
   align-items: center;
   flex-direction: row;
+}
+
+.d-collapse-btn {
+  border: 1px solid;
+  margin: 5px 4px 0 4px;
+  padding: 10px;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  background-color: #455A64;
+  color: #FFF;
+  font-size: 16px;
+}
+
+.d-collapse {
+  position: relative;
+  border: 1px solid;
+  border-radius: 5px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  top: -17px; 
+  margin: 0 5px 5px 5px;
+  padding: 10px 10px 0 10px;
 }
 
 .d-icon-g {

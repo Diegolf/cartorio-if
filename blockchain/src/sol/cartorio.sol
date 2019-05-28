@@ -13,6 +13,7 @@ contract Cartorio{
         uint duracao; // carga horária em minutos
         string nomeDoInstrutor; // nome do professor / palestrante , quando se aplicar
         address enderecoDoAutor; // Endereço de quem registrou o certificado (enviou a transação)
+        bool adicionadoPeloAdm; // Indica se o certificado foi assinado pelo administrador do contrato
         bool valido; // Indica se o certificado é válido; Apenas o administrador ou quem enviou pode invalidar um certificado
         uint dataInvalidacao; // No caso de um certificado ser invalidado
         address enderecoInvalidador; // Endereço de quem invalidou o certificado
@@ -113,6 +114,7 @@ contract Cartorio{
 
     // Adiciona o endereço de uma conta como autorizada a realizar determinadas transações no contrato
     function adicionaAutorizado(string apelido, address endereco) public apenasAdministrador {
+        require(endereco != administrador, 'Não é possível adicionar o adimistrador como autorizado');
 
         // Verifica se o endereço já foi cadastrado antes
         if(autorizados[endereco].id == 0){ // Se não cadastra
@@ -142,6 +144,7 @@ contract Cartorio{
         uint duracao, string nomeDoInstrutor) public apenasAutorizadosOuAdiministrador {
 
             uint passo = 1;
+            bool administrador = msg.sender == administrador;
             do{
                 bytes32 id = geraIndice(passo++);
             }while(certificados[id].dataDaTransacao > 0);
@@ -156,6 +159,7 @@ contract Cartorio{
                 duracao: duracao,
                 nomeDoInstrutor: nomeDoInstrutor,
                 enderecoDoAutor: msg.sender,
+                adicionadoPeloAdm: administrador,
                 valido: true,
                 dataInvalidacao: 0,
                 enderecoInvalidador: 0x00

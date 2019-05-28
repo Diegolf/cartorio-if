@@ -32,6 +32,10 @@ class AutorizadoinistratorPainel extends React.Component {
     };
   }
 
+  componentWillMount(){
+    document.title = "Cartório IF - " + this.props.pageName ;
+  }
+
   async componentDidMount() { // For acessado pelo sidebar
     if (this.props.tipoConta !== 'administrador') {
       this.props.history.replace('/');

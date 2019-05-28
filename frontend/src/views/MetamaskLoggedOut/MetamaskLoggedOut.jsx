@@ -19,6 +19,10 @@ class MetamaskLoggedOut extends React.Component {
     };
   }
 
+  componentWillMount(){
+    document.title = "Cartório IF - " + this.props.pageName ;
+  }
+
   onContinuarComoVisitante() {
     this.props.funcoes.continuarComoVisitante();
     this.props.history.goBack();
