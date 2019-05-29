@@ -24,9 +24,13 @@ const Certificado = new mongoose.Schema({
     nomeDoInstrutor: {
         type: String,
         required: true
+    },
+    assinado: {
+        type: Boolean,
+        default: false
     }
-},{
-    timestamps: true // Cria os campos createdAt e updatedAt
-});
+}, {
+        timestamps: true // Cria os campos createdAt e updatedAt
+    });
 
 module.exports = mongoose.model('Certificado', Certificado);
