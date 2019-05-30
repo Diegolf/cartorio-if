@@ -21,11 +21,11 @@ export default class CertificadosList extends Component {
         return (
             <Fragment>
                 <Row onClick={this.toggle} className="d-collapse-btn" style={{ marginBottom: '1rem' }}>
-                    <Col className=""><strong>Título:</strong> {this.props.data.titulo}</Col>
-                    <Col className=""><strong>Aluno</strong> {this.props.data.nome}</Col>
+                    <Col ><strong>Título:</strong> {this.props.data.titulo}</Col>
+                    <Col ><strong>Aluno</strong> {this.props.data.nome}</Col>
                     <Col xs="auto" className="d-collapse-icon"><i className="nc-icon nc-minimal-down" /></Col>
                 </Row>
-                <Collapse isOpen={this.state.collapse} toggler="a" className="d-collapse">
+                <Collapse isOpen={this.state.collapse} className="d-collapse">
                     <Row className="d-center d-text18">
                         <Col xs="auto"><strong>Email:</strong> {this.props.data.email} </Col>
                         <Col xs="auto"><strong>Data do Curso:</strong> <Moment format="DD/MM/YYYY">{this.props.data.dataDoCurso}</Moment> </Col>
@@ -34,7 +34,7 @@ export default class CertificadosList extends Component {
                         <Col xs="auto">Há {distanceInWords(this.props.data.createdAt, new Date(), { locale: pt })} </Col>
                     </Row>
                     <Row className="d-center">
-                        <Button onClick={() => { this.props.assinarCertificado(this.props.data._id, this.props.chave)}} style={{ marginBottom: '1rem' }}>Assinar Este Certificado</Button>
+                        <Button onClick={() => { this.props.assinarCertificado(this.props.chave) }} style={{ marginBottom: '1rem' }}>Assinar Este Certificado</Button>
                     </Row>
                 </Collapse>
             </Fragment>

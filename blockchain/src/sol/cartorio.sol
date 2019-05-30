@@ -36,7 +36,7 @@ contract Cartorio{
     address public administrador; // Administrador do contrato
     bytes32 private senhaGeral; // Senha
 
-    event certificadoAdicionado(bytes32 id, string titulo);
+    event certificadoAdicionado(bytes32 id, string nome);
 
     event apelidoModificado(string novoApelido, uint data);
 
@@ -144,7 +144,7 @@ contract Cartorio{
         uint duracao, string nomeDoInstrutor) public apenasAutorizadosOuAdiministrador {
 
             uint passo = 1;
-            bool administrador = msg.sender == administrador;
+            bool idAdministrador = msg.sender == administrador;
             do{
                 bytes32 id = geraIndice(passo++);
             }while(certificados[id].dataDaTransacao > 0);
@@ -159,12 +159,12 @@ contract Cartorio{
                 duracao: duracao,
                 nomeDoInstrutor: nomeDoInstrutor,
                 enderecoDoAutor: msg.sender,
-                adicionadoPeloAdm: administrador,
+                adicionadoPeloAdm: idAdministrador,
                 valido: true,
                 dataInvalidacao: 0,
                 enderecoInvalidador: 0x00
             });
-        emit certificadoAdicionado(id, titulo);
+        emit certificadoAdicionado(id, nome);
     }
 
     // Torna um certificado inválido. Armazena a data e o endereço de quem realizou a transação. Vale lembrar que apenas o administrador ou quem registrou o certificado tem permissão para invalidá-lo.
@@ -180,20 +180,22 @@ contract Cartorio{
     // Retorna os dados do certificado com ID passado por parâmetro.
     function getCertificado(bytes32 id) public certificadoExiste(id) view returns(
         string nome, // nome de quem recebeu o certificado
+        string email, // email de quem recebeu o certificado
         string titulo, // nome do curso / atividade realizada
         uint dataDoCurso, // data em que o curso / atividade foi realizado
         uint dataDaTransacao, // data em que o certificado foi persistido na blockchain
         uint duracao, // carga horária em minutos
         string nomeDoInstrutor, // nome do professor / palestrante , quando se aplicar
         address enderecoDoAutor, // Endereço de quem registrou o certificado (enviou a transação)
+        bool adicionadoPeloAdm, // Indica se o certificado foi assinado pelo administrador do contrato
         bool valido, // Indica se o certificado é válido; Apenas o administrador ou quem enviou pode invalidar um certificado
         uint dataInvalidacao, // No caso de um certificado ser invalidado
         address enderecoInvalidador){
 
             Certificado storage cert = certificados[id];
 
-            return (cert.nome, cert.titulo, cert.dataDoCurso, cert.dataDaTransacao, cert.duracao,
-                cert.nomeDoInstrutor, cert.enderecoDoAutor, cert.valido, cert.dataInvalidacao, cert.enderecoInvalidador
+            return (cert.nome, cert.email, cert.titulo, cert.dataDoCurso, cert.dataDaTransacao, cert.duracao,
+                cert.nomeDoInstrutor, cert.enderecoDoAutor, cert.adicionadoPeloAdm, cert.valido, cert.dataInvalidacao, cert.enderecoInvalidador
             );
     }
 

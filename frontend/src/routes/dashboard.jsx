@@ -10,6 +10,7 @@ import MetamaskLoggedOut from "views/MetamaskLoggedOut/MetamaskLoggedOut.jsx"
 import RootPainel from "views/RootPainel/RootPainel.jsx"
 import AdministratorPainel from "views/AdministratorPainel/AdministratorPainel.jsx";
 import SignCertificate from "views/SignCertificate/SignCertificate.jsx";
+import QueryCertificate from "views/QueryCertificate/QueryCertificate.jsx";
 
 
 var dashRoutes = [
@@ -33,6 +34,12 @@ var dashRoutes = [
     name: "Assinar Certificado",
     icon: "nc-icon nc-touch-id",
     component: SignCertificate
+  },
+  {
+    path: "/consulta",
+    name: "Consultar Certificado",
+    icon: "nc-icon nc-key-25",
+    component: QueryCertificate
   },
   {
     path: "/dashboard",

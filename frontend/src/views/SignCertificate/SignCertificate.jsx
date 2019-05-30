@@ -1,16 +1,12 @@
-/*eslint-disable*/
 import React, { Component, Fragment } from "react";
 import {
   Card,
   CardTitle,
   CardBody,
   CardHeader,
-  UncontrolledCollapse,
   Row,
   Col,
 } from "reactstrap";
-
-import Button from "components/CustomButton/CustomButton.jsx";
 
 import api from "services/api.js";
 import CertificadosList from "components/CertificadosList/CertificadosList.jsx";
@@ -35,6 +31,7 @@ class SignCertificate extends Component {
 
     const retorno = await api.get('/certificados');
 
+    /*
     const rt = await api.post('/certificado', {
       nome: 'nome nome nome',
       email: 'email@gmail.com',
@@ -45,31 +42,68 @@ class SignCertificate extends Component {
     });
 
     console.log(rt);
+    */
 
     this.setState({ certificados: retorno.data });
   }
 
-  async assinarCertificado(id, chave) {
-    const retorno = await api.put('/certificado/'+id);
+  async assinarCertificado(chave) {
 
-    let certificados = this.state.certificados;
-    delete certificados[chave];
+    const certificado = this.state.certificados[chave];
 
-    if (retorno.data.ok){
+    const notificacaoID = this.props.funcoes.notify({
+      message: 'Transação enviada, aguardando confirmação ...',
+      icon: false,
+      type: 'info',
+      time: 200
+    });
+
+    let evento = this.props.cartorio.events.certificadoAdicionado();
+
+    // Começa a escutar os eventos do contrato
+    evento.on('data', async (res) => {
+      
+      if (res.returnValues.titulo === certificado.titulo) {
+
+        this.props.funcoes.notify({
+          message: 'Chave do certificado do '+certificado.nome+': '+res.returnValues.id,
+          place: 'bc',
+          icon: 'nc-icon nc-key-25',
+          type: 'success',
+          time: 40
+        });
+
+      }
+    });
+
+    try {
+      await this.props.cartorio.methods.adicionarCertificado(
+        certificado.nome, certificado.email, certificado.titulo, new Date(certificado.dataDoCurso).getTime(),
+        certificado.duracao, certificado.nomeDoInstrutor
+      ).send({ from: this.props.conta, gas: '2000000' });
+
       this.props.funcoes.notify({
-        message: 'Transação confirmada ! O autorizado foi adicionado. ',
+        message: 'Transação confirmada ! O certificado foi assinado e armazenado na Blockchain. ',
         icon: 'nc-icon nc-check-2',
         type: 'success',
         time: 15
       });
-      this.setState({certificados})
-    }else{
+
+      await api.put('/certificado/' + certificado._id);
+      let certificados = this.state.certificados;
+      delete certificados[chave];
+      this.setState({ certificados });
+
+    } catch (e) {
       this.props.funcoes.notify({
         message: 'Transação cancelada ou correu um erro na Ethereum, verifique o console para mais informações',
         icon: 'nc-icon nc-simple-remove',
         type: 'danger'
       });
+      console.log(e);
     }
+    this.props.funcoes.notifyDismiss(notificacaoID);
+    evento.unsubscribe();
   }
 
   render() {

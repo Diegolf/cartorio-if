@@ -166,24 +166,24 @@ describe('Testes', () => {
 
     it('Autorizados podem adicionar certificados', async () => {
         let evento = cartorio.events.certificadoAdicionado();
-        const titulo = 'Desenvolvendo testes com Mocha';
+        const nome = 'FulanoDeTal';
         let adicionado = false;
 
         // Começa a escutar os eventos do contrato
         evento.on('data', async (res) => {
-            certificados[res.returnValues.id] = res.returnValues.titulo;
-            if (res.returnValues.titulo == titulo) {
+            certificados[res.returnValues.id] = res.returnValues.nome;
+            if (res.returnValues.nome == nome) {
                 const id = res.returnValues.id
                 certificadoAdicionadoConta1 = id;
 
                 const certificado = await cartorio.methods.getCertificado(id).call({ from: admAddress });
 
-                if (certificado.titulo == titulo) adicionado = true;
+                if (certificado.nome == nome) adicionado = true;
             }
         });
 
         await cartorio.methods.adicionarCertificado(
-            'nome', 'email', titulo, 1, 120, 'nomeDoInstrutor'
+            nome, 'email', 'Desenvolvendo testes com Mocha', 1, 120, 'nomeDoInstrutor'
         ).send({ from: accounts[1], gas: '2000000' });
         await cartorio.methods.adicionarCertificado(
             'nome', 'email', 'Desenvolvendo testes com Mocha 2', 2, 120, 'nomeDoInstrutor'
@@ -195,23 +195,23 @@ describe('Testes', () => {
 
     it('Administrador pode adicionar certificados', async () => {
         let evento = cartorio.events.certificadoAdicionado();
-        const titulo = 'Certificado adicionado pelo adminsitrador';
+        const nome = 'DonaAlgumaCoisa';
         let adicionado = false;
 
         // Começa a escutar os eventos do contrato
         evento.on('data', async (res) => {
-            certificados[res.returnValues.id] = res.returnValues.titulo;
-            if (res.returnValues.titulo == titulo) {
+            certificados[res.returnValues.id] = res.returnValues.nome;
+            if (res.returnValues.nome == nome) {
                 const id = res.returnValues.id
 
                 const certificado = await cartorio.methods.getCertificado(id).call({ from: admAddress });
 
-                if (certificado.titulo == titulo) adicionado = true;
+                if (certificado.nome == nome) adicionado = true;
             }
         });
 
         await cartorio.methods.adicionarCertificado(
-            'nome', 'email', titulo, 1, 120, 'nomeDoInstrutor'
+            nome, 'email', 'Certificado adicionado pelo adminsitrador', 1, 120, 'nomeDoInstrutor'
         ).send({ from: admAddress, gas: '2000000' });
         await cartorio.methods.adicionarCertificado(
             'nome', 'email', 'Certificado adicionado pelo adminsitrador 2', 2, 120, 'nomeDoInstrutor'
