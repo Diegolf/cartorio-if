@@ -33,13 +33,14 @@ class SignCertificate extends Component {
 
     /*
     const rt = await api.post('/certificado', {
-      nome: 'nome nome nome',
+      nome: 'Aluno Y',
       email: 'email@gmail.com',
-      titulo: 'título do',
+      titulo: 'Minicurso de React',
       dataDoCurso: Date.now(),
       duracao: '120',
       nomeDoInstrutor: 'nome do instrutor'
     });
+    
 
     console.log(rt);
     */

@@ -42,31 +42,42 @@ var dashRoutes = [
     component: QueryCertificate
   },
   {
+    hidden: true,
     path: "/dashboard",
-    name: "Dashboard",
+    name: "Início",
     icon: "nc-icon nc-bank",
     component: Dashboard
   },
   {
+    hidden: true,
     path: "/icons",
     name: "Icons",
     icon: "nc-icon nc-diamond",
     component: Icons
   },
-  { path: "/maps", name: "Maps", icon: "nc-icon nc-pin-3", component: Maps },
   {
+    hidden: true,
+    path: "/maps", 
+    name: "Maps", 
+    icon: "nc-icon nc-pin-3", 
+    component: Maps
+  },
+  {
+    hidden: true,
     path: "/notifications",
     name: "Notifications",
     icon: "nc-icon nc-bell-55",
     component: Notifications
   },
   {
+    hidden: true,
     path: "/user-page",
     name: "User Profile",
     icon: "nc-icon nc-single-02",
     component: UserPage
   },
   {
+    hidden: true,
     path: "/tables",
     name: "Table List",
     icon: "nc-icon nc-tile-56",
@@ -74,15 +85,16 @@ var dashRoutes = [
   },
   {
     hidden: true,
-    path: "/metamaskloggedout",
-    name: "Metamask deslogado",
-    component: MetamaskLoggedOut
-  },
-  {
     path: "/typography",
     name: "Typography",
     icon: "nc-icon nc-caps-small",
     component: Typography
+  },
+  {
+    hidden: true,
+    path: "/metamaskloggedout",
+    name: "Metamask deslogado",
+    component: MetamaskLoggedOut
   },
   {
     pro: true,
