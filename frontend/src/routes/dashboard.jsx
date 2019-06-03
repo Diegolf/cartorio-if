@@ -97,11 +97,12 @@ var dashRoutes = [
     component: MetamaskLoggedOut
   },
   {
+    hidden:true,
     pro: true,
     path: "/upgrade",
     name: "Upgrade to PRO",
     icon: "nc-icon nc-spaceship"
   },
-  { redirect: true, path: "/", pathTo: "/dashboard", name: "Dashboard" }
+  { redirect: true, path: "/", pathTo: "/consulta", name: "Dashboard" }
 ];
 export default dashRoutes;
