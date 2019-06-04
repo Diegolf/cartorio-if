@@ -27,7 +27,7 @@ before(async () => {
         .deploy({ data: bytecode })
 
         // Instrui a web3 à enviar uma transação que cria esse contrato
-        .send({ from: rootAddress, gas: '2000000' });
+        .send({ from: rootAddress, gas: '2900000' });
 
 });
 
@@ -243,7 +243,7 @@ describe('Testes', () => {
         await cartorio.methods.invalidarCertificado(idCertificado1)
             .send({ from: admAddress, gas: '2000000' });
 
-        const certificado1 = await cartorio.methods.getCertificado(idCertificado1)
+        const certificado1 = await cartorio.methods.getInformacoesCertificado(idCertificado1)
             .call({ from: admAddress });
 
         assert(certificado1.valido == false);
@@ -254,7 +254,7 @@ describe('Testes', () => {
         await cartorio.methods.invalidarCertificado(certificadoAdicionadoConta1)
             .send({ from: accounts[1], gas: '2000000' });
 
-        const certificado = await cartorio.methods.getCertificado(certificadoAdicionadoConta1)
+        const certificado = await cartorio.methods.getInformacoesCertificado(certificadoAdicionadoConta1)
             .call({ from: admAddress });
 
         assert(certificado.valido == false);
@@ -272,7 +272,7 @@ describe('Testes', () => {
         } catch (e) {
             assert(e.results[e.hashes[0]].error == 'revert');
         }
-        const certificado3 = await cartorio.methods.getCertificado(idCertificado3)
+        const certificado3 = await cartorio.methods.getInformacoesCertificado(idCertificado3)
             .call({ from: admAddress });
 
         assert(certificado3.valido == true);

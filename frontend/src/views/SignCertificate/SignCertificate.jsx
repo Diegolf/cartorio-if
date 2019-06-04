@@ -64,7 +64,7 @@ class SignCertificate extends Component {
     // Começa a escutar os eventos do contrato
     evento.on('data', async (res) => {
       
-      if (res.returnValues.titulo === certificado.titulo) {
+      if (res.returnValues.nome === certificado.nome) {
 
         this.props.funcoes.notify({
           message: 'Chave do certificado do '+certificado.nome+': '+res.returnValues.id,

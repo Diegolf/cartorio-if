@@ -183,19 +183,26 @@ contract Cartorio{
         string email, // email de quem recebeu o certificado
         string titulo, // nome do curso / atividade realizada
         uint dataDoCurso, // data em que o curso / atividade foi realizado
-        uint dataDaTransacao, // data em que o certificado foi persistido na blockchain
         uint duracao, // carga horária em minutos
-        string nomeDoInstrutor, // nome do professor / palestrante , quando se aplicar
+        string nomeDoInstrutor // nome do professor / palestrante , quando se aplicar
+        ){
+            Certificado storage cert = certificados[id];
+
+            return (cert.nome, cert.email, cert.titulo, cert.dataDoCurso, cert.duracao, cert.nomeDoInstrutor);
+    }
+
+    function getInformacoesCertificado(bytes32 id) public certificadoExiste(id) view returns(
+        uint dataDaTransacao, // data em que o certificado foi persistido na blockchain
         address enderecoDoAutor, // Endereço de quem registrou o certificado (enviou a transação)
         bool adicionadoPeloAdm, // Indica se o certificado foi assinado pelo administrador do contrato
         bool valido, // Indica se o certificado é válido; Apenas o administrador ou quem enviou pode invalidar um certificado
         uint dataInvalidacao, // No caso de um certificado ser invalidado
-        address enderecoInvalidador){
-
+        address enderecoInvalidador // Endereço de quem invalidou o certificado
+        ){
             Certificado storage cert = certificados[id];
 
-            return (cert.nome, cert.email, cert.titulo, cert.dataDoCurso, cert.dataDaTransacao, cert.duracao,
-                cert.nomeDoInstrutor, cert.enderecoDoAutor, cert.adicionadoPeloAdm, cert.valido, cert.dataInvalidacao, cert.enderecoInvalidador
+            return (cert.dataDaTransacao, cert.enderecoDoAutor, cert.adicionadoPeloAdm, cert.valido,
+                cert.dataInvalidacao, cert.enderecoInvalidador
             );
     }
 
