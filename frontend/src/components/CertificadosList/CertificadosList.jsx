@@ -25,7 +25,7 @@ export default class CertificadosList extends Component {
                     <Col ><strong>Aluno</strong> {this.props.data.nome}</Col>
                     <Col xs="auto" className="d-collapse-icon"><i className="nc-icon nc-minimal-down" /></Col>
                 </Row>
-                <Collapse isOpen={this.state.collapse} className="d-collapse">
+                <Collapse isOpen={this.state.collapse} className="d-collapse d-metal-gradient">
                     <Row className="d-center d-text18">
                         <Col xs="auto"><strong>Email:</strong> {this.props.data.email} </Col>
                         <Col xs="auto"><strong>Data do Curso:</strong> <Moment format="DD/MM/YYYY">{this.props.data.dataDoCurso}</Moment> </Col>

@@ -6,6 +6,7 @@ const app = express();
 const server = require('http').Server(app);
 
 mongoose.connect(require('./.mongooseConnection'), {
+    useCreateIndex: true,
     useNewUrlParser: true
 });
 
