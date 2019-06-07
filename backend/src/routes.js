@@ -3,11 +3,14 @@ const express = require('express');
 const routes = express.Router();
 
 const certificadoController = require('./controllers/certificadoController');
-const authController = require('./controllers/authController');
+const usuarioController = require('./controllers/usuarioController');
+const authMiddleware = require('./middlewares/auth');
 
-routes.post('/registro', authController.registro);
+routes.post('/registro', usuarioController.registro);
+routes.post('/autenticar' , usuarioController.autenticar);
+routes.get('/usuario', authMiddleware, usuarioController.getUsuarioById);
 
-routes.post('/certificado', certificadoController.armazenar);
+routes.post('/certificado', authMiddleware, certificadoController.armazenar);
 routes.put('/certificado/:id',certificadoController.atualiza);
 routes.get('/certificados', certificadoController.certificados);
 

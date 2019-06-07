@@ -16,7 +16,11 @@ const Usuario = new mongoose.Schema({
         type: String,
         required: true,
         select: false,
-    }
+    },
+    certificados: [{
+        type: mongoose.Schema.Types.ObjectId, 
+        ref: 'Certificado'
+    }]
 }, {
     timestamps: true // Cria os campos createdAt e updatedAt
 });

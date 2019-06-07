@@ -30,7 +30,10 @@ const Certificado = new mongoose.Schema({
         default: false
     }
 }, {
-        timestamps: true // Cria os campos createdAt e updatedAt
-    });
+        timestamps: true, // Cria os campos createdAt e updatedAt
+        toObject: { virtuals: true },
+        toJSON: { virtuals: true }
+    }
+);
 
 module.exports = mongoose.model('Certificado', Certificado);
