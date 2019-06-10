@@ -35,7 +35,7 @@ class Sidebar extends React.Component {
       <div className="sidebar" data-color={this.props.bgColor} data-active-color={this.props.activeColor}>
         <div className="logo">
           <a
-            href="https://www.creative-tim.com"
+            href="/"
             className="simple-text logo-mini"
           >
             <div className="logo-img">
@@ -43,7 +43,7 @@ class Sidebar extends React.Component {
             </div>
           </a>
           <a
-            href="https://www.creative-tim.com"
+            href="/"
             className="simple-text logo-normal"
           >
             Cartório IF
@@ -69,6 +69,7 @@ class Sidebar extends React.Component {
                     to={prop.path}
                     className="nav-link"
                     activeClassName="active"
+                    style={{textTransform: "none", fontSize: "14px"}}
                   >
                     <i className={prop.icon} />
                     <p>{prop.name}</p>

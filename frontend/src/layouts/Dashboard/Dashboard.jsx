@@ -43,17 +43,17 @@ class Dashboard extends React.Component {
     let tipoConta;
 
     if (tipoLogin === 'metamask') {
-      const isAutorizado = await cartorio.methods.isAutorizado(contas[0]).call();
+      const isAutorizado = await cartorio.methods.isAutorizado(contas[0]).call({from: contas[0]});
 
       if (isAutorizado) {
         tipoConta = 'autorizado';
       } else {
-        const administrador = await cartorio.methods.administrador().call();
+        const administrador = await cartorio.methods.administrador().call({from: contas[0]});
 
         if (administrador === contas[0]) {
           tipoConta = 'administrador';
         } else {
-          const root = await cartorio.methods.root().call();
+          const root = await cartorio.methods.root().call({from: contas[0]});
 
           if (root === contas[0]) {
             tipoConta = 'root';

@@ -35,13 +35,19 @@ class CertificadoController {
     }
 
     async atualiza(req, res) {
-        if (req.params.id) {
+        const {id} = req.params;
 
-            await Certificado.updateOne({ _id: req.params.id }, { assinado: true });
+        if (id) {
 
-            return res.json({ ok: true })
+            try{
+                await Certificado.updateOne({ _id: req.params.id }, { assinado: true });
+                return res.status(200).send({error: false});
+            }catch(e){
+                return res.status(200).send({error: 'Erro ao tentar modificar o certificado'});
+            }
+            
         } else {
-            return res.json({ ok: false });
+            return res.status(400).send({ error: 'ID não informado.' });
         }
     }
 

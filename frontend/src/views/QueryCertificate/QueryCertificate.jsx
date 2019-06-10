@@ -157,7 +157,7 @@ class SignCertificate extends Component {
                 </InputGroup>
                 {this.state.certificado && (
                   <CardBody className="d-container">
-                    <Row onClick={this.toggle} className="d-collapse-btn" style={{ marginBottom: '1rem' }}>
+                    <Row onClick={this.toggle} className="d-collapse-btn" style={{ marginBottom: '1rem', cursor: 'default' }}>
                       <Col ><strong>Chave: </strong> {this.state.certificado.chave}</Col>
                       <Col xs="auto"><i className={"d-icon nc-icon " + (this.state.certificado.valido ? 'nc-check-2 d-green' : 'nc-simple-remove d-red')} /></Col>
                     </Row>

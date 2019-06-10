@@ -11,6 +11,7 @@ import RootPainel from "views/RootPainel/RootPainel.jsx"
 import AdministratorPainel from "views/AdministratorPainel/AdministratorPainel.jsx";
 import SignCertificate from "views/SignCertificate/SignCertificate.jsx";
 import QueryCertificate from "views/QueryCertificate/QueryCertificate.jsx";
+import AddCertificate from "views/addCertificate/addCertificate.jsx";
 
 
 var dashRoutes = [
@@ -42,49 +43,48 @@ var dashRoutes = [
     component: QueryCertificate
   },
   {
-    hidden: true,
+    path: "/adicionar-certificado",
+    name: "Adicionar Certificado",
+    icon: "nc-icon nc-paper",
+    component: AddCertificate
+  },
+  {
     path: "/dashboard",
     name: "Início",
     icon: "nc-icon nc-bank",
     component: Dashboard
   },
   {
-    hidden: true,
     path: "/icons",
     name: "Icons",
     icon: "nc-icon nc-diamond",
     component: Icons
   },
   {
-    hidden: true,
     path: "/maps", 
     name: "Maps", 
     icon: "nc-icon nc-pin-3", 
     component: Maps
   },
   {
-    hidden: true,
     path: "/notifications",
     name: "Notifications",
     icon: "nc-icon nc-bell-55",
     component: Notifications
   },
   {
-    hidden: true,
     path: "/user-page",
     name: "User Profile",
     icon: "nc-icon nc-single-02",
     component: UserPage
   },
   {
-    hidden: true,
     path: "/tables",
     name: "Table List",
     icon: "nc-icon nc-tile-56",
     component: TableList
   },
   {
-    hidden: true,
     path: "/typography",
     name: "Typography",
     icon: "nc-icon nc-caps-small",
@@ -97,7 +97,6 @@ var dashRoutes = [
     component: MetamaskLoggedOut
   },
   {
-    hidden:true,
     pro: true,
     path: "/upgrade",
     name: "Upgrade to PRO",

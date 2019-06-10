@@ -9,6 +9,7 @@ const authMiddleware = require('./middlewares/auth');
 routes.post('/registro', usuarioController.registro);
 routes.post('/autenticar' , usuarioController.autenticar);
 routes.get('/usuario', authMiddleware, usuarioController.getUsuarioById);
+routes.get('/token', authMiddleware, (req,res) => res.json({error: false}));
 
 routes.post('/certificado', authMiddleware, certificadoController.armazenar);
 routes.put('/certificado/:id',certificadoController.atualiza);

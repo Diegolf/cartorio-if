@@ -24,12 +24,22 @@ class SignCertificate extends Component {
     document.title = "Cartório IF - " + this.props.pageName;
   }
 
-  async componentDidMount() { // For acessado pelo sidebar
+  async componentDidMount() {
     if (this.props.tipoConta !== 'administrador' && this.props.tipoConta !== 'autorizado') {
       this.props.history.replace('/');
     }
 
-    const retorno = await api.get('/certificados');
+    let retorno = { data: [] };
+    try {
+      retorno = await api.get('/certificados');
+    } catch (e) {
+
+      this.props.funcoes.notify({
+        message: 'Não fo possivel conectar ao servidor. Nenhum certificado carregado.',
+        icon: 'nc-icon nc-simple-remove',
+        type: 'danger'
+      });
+    }
 
     /*
     const rt = await api.post('/certificado', {
@@ -44,7 +54,6 @@ class SignCertificate extends Component {
 
     console.log(rt);
     */
-
     this.setState({ certificados: retorno.data });
   }
 
@@ -63,11 +72,11 @@ class SignCertificate extends Component {
 
     // Começa a escutar os eventos do contrato
     evento.on('data', async (res) => {
-      
+
       if (res.returnValues.nome === certificado.nome) {
 
         this.props.funcoes.notify({
-          message: 'Chave do certificado do '+certificado.nome+': '+res.returnValues.id,
+          message: 'Chave do certificado do ' + certificado.nome + ': ' + res.returnValues.id,
           place: 'bc',
           icon: 'nc-icon nc-key-25',
           type: 'success',

@@ -29,30 +29,30 @@ class UsuarioController {
         try {
             const usuario = await Usuario.findOne({ email }).select('+senha');
             if (!usuario)
-                return res.status(400).send({ error: 'Usuario não encontrado' });
+                return res.status(400).send({ error: 'Usuario não encontrado.', cod: 1 });
 
             if (!await bcrypt.compare(senha, usuario.senha))
-                return res.status(400).send({error: 'Senha incorreta'});
+                return res.status(400).send({ error: 'Senha incorreta.', cod: 2 });
 
-            const token = jwt.sign({ id: usuario._id}, authConfig.segredo, {expiresIn: 3600});
+            const token = jwt.sign({ id: usuario._id }, authConfig.segredo, { expiresIn: 3600 });
 
             usuario.senha = undefined;
-            return res.send({usuario, token});
+            return res.send({ usuario, token });
 
-        }catch(e){
-            res.status(400).send({error: 'Falha na autenticação'});
+        } catch (e) {
+            res.status(400).send({ error: 'Falha na autenticação.', cod: 3 });
         }
     }
 
-    async getUsuarioById(req, res){
+    async getUsuarioById(req, res) {
         const id = req.userId;
 
-        try{
-            const user = await Usuario.findOne({_id: id});
+        try {
+            const user = await Usuario.findOne({ _id: id });
 
-            res.send({user});
-        }catch(e){
-            res.status(400).send({error:'Usuário não encontrado'})
+            res.send({ user });
+        } catch (e) {
+            res.status(400).send({ error: 'Usuário não encontrado' })
         }
     }
 }
