@@ -31,17 +31,11 @@ class RootPainel extends React.Component {
     document.title = "Cartório IF - " + this.props.pageName ;
   }
 
-  componentDidMount() { // For acessado pelo sidebar
+  componentDidMount() { 
     if (this.props.tipoConta !== 'root') {
       this.props.history.replace('/');
     }
   }
-
-  /*componentDidUpdate() { // For acessado diretamente pela barra de endereços
-    if (this.props.tipoConta !== 'root') {
-      this.props.history.replace('/');
-    }
-  }*/
 
   async onEnderecoNovoAdmButtonClick() {
     const endereco = this.state.enderecoNovoAdm;

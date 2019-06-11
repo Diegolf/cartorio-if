@@ -12,6 +12,7 @@ import AdministratorPainel from "views/AdministratorPainel/AdministratorPainel.j
 import SignCertificate from "views/SignCertificate/SignCertificate.jsx";
 import QueryCertificate from "views/QueryCertificate/QueryCertificate.jsx";
 import AddCertificate from "views/addCertificate/addCertificate.jsx";
+import AddCertificateLogin from "views/addCertificateLogin/addCertificateLogin.jsx";
 
 
 var dashRoutes = [
@@ -47,6 +48,13 @@ var dashRoutes = [
     name: "Adicionar Certificado",
     icon: "nc-icon nc-paper",
     component: AddCertificate
+  },
+  {
+    hidden: true,
+    path: "/adicionar-certificado/login",
+    name: "Adicionar Certificado",
+    icon: "nc-icon nc-paper",
+    component: AddCertificateLogin
   },
   {
     path: "/dashboard",

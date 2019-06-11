@@ -23,7 +23,7 @@ export default class CertificadosList extends Component {
                 <Row onClick={this.toggle} className="d-collapse-btn" style={{ marginBottom: '1rem' }}>
                     <Col ><strong>Título:</strong> {this.props.data.titulo}</Col>
                     <Col ><strong>Aluno</strong> {this.props.data.nome}</Col>
-                    <Col xs="auto" className="d-collapse-icon"><i className="nc-icon nc-minimal-down" /></Col>
+                    <Col xs="auto" className="d-collapse-icon d-center"><i className="nc-icon nc-minimal-down" /></Col>
                 </Row>
                 <Collapse isOpen={this.state.collapse} className="d-collapse d-metal-gradient">
                     <Row className="d-center d-text18">
@@ -32,9 +32,16 @@ export default class CertificadosList extends Component {
                         <Col xs="auto"><strong>Duração:</strong> {this.props.data.duracao} minutos</Col>
                         <Col xs="auto"><strong>Nome do instrutor:</strong> {this.props.data.nomeDoInstrutor} </Col>
                         <Col xs="auto">Há {distanceInWords(this.props.data.createdAt, new Date(), { locale: pt })} </Col>
+                        {!this.props.assinarCertificado && (
+                            <Col xs="auto" className={this.props.data.assinado ? 'text-success' : 'text-warning'}>
+                                {this.props.data.assinado ? 'Assinado !' : 'Não assinado ainda.'}
+                            </Col>
+                        )}
                     </Row>
                     <Row className="d-center">
-                        <Button onClick={() => { this.props.assinarCertificado(this.props.chave) }} style={{ marginBottom: '1rem' }}>Assinar Este Certificado</Button>
+                        {this.props.assinarCertificado && (
+                            <Button onClick={() => { this.props.assinarCertificado(this.props.chave) }} style={{ marginBottom: '1rem' }}>Assinar Este Certificado</Button>
+                        )}
                     </Row>
                 </Collapse>
             </Fragment>

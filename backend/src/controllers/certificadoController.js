@@ -7,7 +7,7 @@ class CertificadoController {
         const userId = req.userId;
         const { nome, email, titulo, dataDoCurso, duracao, nomeDoInstrutor } = req.body;
 
-        if ( !nome || !email || !titulo || !dataDoCurso || !duracao || !nomeDoInstrutor )
+        if (!nome || !email || !titulo || !dataDoCurso || !duracao || !nomeDoInstrutor)
             return res.status(400).send({
                 error: 'Nome, email, título, data do curso, duração e/ou nome do instrutor não informado(s).'
             });
@@ -15,37 +15,37 @@ class CertificadoController {
         let usuario = {};
         try {
             usuario = await Usuario.findById(userId).select('+senha');
-        }catch(e){
-            return res.status(400).send({error:'Usuário não encontrado ou inválido'});
+        } catch (e) {
+            return res.status(400).send({ error: 'Usuário não encontrado ou inválido' });
         }
 
         try {
             const certificado = await Certificado.create({
                 nome, email, titulo, dataDoCurso, duracao, nomeDoInstrutor
             });
-    
+
             usuario.certificados.push(certificado);
             await usuario.save();
-            
-            return res.send(certificado);            
-        }catch(e){
-            return res.status(400).send({error:'Erro ao adicionar certificado'});
+
+            return res.send(certificado);
+        } catch (e) {
+            return res.status(400).send({ error: 'Erro ao adicionar certificado' });
         }
-        
+
     }
 
     async atualiza(req, res) {
-        const {id} = req.params;
+        const { id } = req.params;
 
         if (id) {
 
-            try{
+            try {
                 await Certificado.updateOne({ _id: req.params.id }, { assinado: true });
-                return res.status(200).send({error: false});
-            }catch(e){
-                return res.status(200).send({error: 'Erro ao tentar modificar o certificado'});
+                return res.status(200).send({ error: false });
+            } catch (e) {
+                return res.status(200).send({ error: 'Erro ao tentar modificar o certificado' });
             }
-            
+
         } else {
             return res.status(400).send({ error: 'ID não informado.' });
         }
@@ -66,6 +66,17 @@ class CertificadoController {
 
         return res.json(certificados);
     }
+
+    async getCertificadoById(req, res) {
+        const { id } = req.params;
+        try {
+            const certificado = await Certificado.findOne({ _id: id });
+
+            res.send({certificado});
+            }catch (e) {
+                res.status(400).send({ error: 'Certificado não encontrado' });
+            }
+        }
 
 }
 

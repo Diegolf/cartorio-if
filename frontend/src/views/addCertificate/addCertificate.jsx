@@ -1,170 +1,145 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import {
     Card,
     CardBody,
-    Form,
-    FormGroup,
-    Label,
-    Input,
-    InputGroup,
-    InputGroupAddon,
-    FormFeedback,
-    Button,
+    CardHeader,
+    CardTitle,
     Row,
     Col,
 } from "reactstrap";
 
-import CardAuthor from "components/CardElements/CardAuthor.jsx";
-
-import avatar from "assets/img/default-avatar.png";
-import ifHeader from "assets/img/if-header.jpg";
-
 import api from "services/api.js";
+import CertificadosList from "components/CertificadosList/CertificadosList.jsx";
 
 class AddCertificate extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            email: '',
-            emailFeedBack: '',
-            senha: '',
-            senhaFeedBack: ''
+            usuario: { certificados: [] },
         }
     }
 
-    componentWillMount() {
+    async componentWillMount() {
         document.title = "Cartório IF - " + this.props.pageName;
-    }
 
-    logarClick = async (e) => {
-        e.preventDefault();
-        const email = this.state.email;
-        const senha = this.state.senha;
+        const token = localStorage.getItem('usr');
 
-        if (!email) {
-            this.props.funcoes.notify({
-                message: 'Infome o endereço de email',
-                icon: 'nc-icon nc-simple-remove',
-                type: 'danger'
-            });
-
-            this.setState({ emailFeedBack: 'Informe o email' });
+        if (!token) {
+            this.props.history.replace('/adicionar-certificado/login');
             return;
         }
 
-        if (this.state.emailFeedBack.length) {
-            this.setState({ emailFeedBack: '' });
-        }
-
-
-        if (!senha) {
-            this.props.funcoes.notify({
-                message: 'Infome a senha',
-                icon: 'nc-icon nc-simple-remove',
-                type: 'danger'
-            });
-
-            this.setState({ senhaFeedBack: 'Informe o senha' });
-            return;
-        }
-
-        let retorno = '';
         try {
-            retorno = await api.post('/autenticar', {
-                email, senha
+            await api.get('/token', {
+                headers: { autorizacao: `Bearer ${token}` }
             });
-            localStorage.setItem('usr', retorno.data.token);
-            this.props.funcoes.notify({
-                message: `Seja bem vindo, ${retorno.data.usuario.nome}`,
-                icon: 'nc-icon nc-check-2',
-                type: 'success',
-                time: 15
-              });
-        
+
         } catch (e) {
             if (e.response) {
-                switch(e.response.data.cod){
-                    case 1:{ // email
-                        this.setState({emailFeedBack: 'Email não cadastrado'});
+                localStorage.removeItem('usr');
+                switch (e.response.data.cod) {
+                    case 1: case 2: case 3: {
+                        this.props.history.replace('/adicionar-certificado/login');
                         break;
                     }
-                    case 2: { // senha
-                        this.setState({senhaFeedBack: 'Senha incorreta'});
+                    case 4: { // email
+                        this.props.funcoes.notify({
+                            message: 'Login expirado. Favor logar novamente',
+                            icon: 'nc-icon nc-time-alarm',
+                            type: 'warning'
+                        });
                         break;
                     }
+                    default: { }
                 }
-                this.props.funcoes.notify({
-                    message: `${e.response.data.error} ${e.response.data.code === 3 ? 'Notifique um administrador, por favor.' : ''}`,
-                    icon: 'nc-icon nc-simple-remove',
-                    type: 'danger'
-                });
             } else {
                 this.props.funcoes.notify({
-                    message: 'Não fo possivel conectar ao servidor. Nenhum certificado carregado.',
+                    message: 'Não fo possivel conectar ao servidor. Tente novamente mais tarde',
                     icon: 'nc-icon nc-simple-remove',
                     type: 'danger'
                 });
+                this.props.history.replace('/');
             }
+            return;
         }
     }
+
+    async componentDidMount() {
+        const token = localStorage.getItem('usr');
+
+        if (!token)
+            return;
+
+        try {
+            const retorno = await api.get('/usuario', {
+                headers: { autorizacao: `Bearer ${token}` }
+            });
+
+            this.setState({ usuario: retorno.data.user })
+        } catch (e) {
+            if (e.response) {
+                localStorage.removeItem('usr');
+                this.props.history.replace('/adicionar-certificado/login');
+
+            } else {
+                this.props.funcoes.notify({
+                    message: 'Não fo possivel conectar ao servidor.Tente novamente mais tarde.',
+                    icon: 'nc-icon nc-simple-remove',
+                    type: 'danger'
+                });
+                this.props.history.replace('/');
+            }
+            return;
+        }
+    }
+
 
     render() {
         return (
             <div className="content" >
-                <Row className="d-center">
-                    <Col sm={10} md={7}>
-                        <Card className="card-user">
-                            <div className="image">
-                                <img src={ifHeader} alt="Fachada do IF" />
-                            </div>
+                <Row>
+                    <Col md={12}>
+                        <Card>
+                            <CardHeader>
+                                <Row style={{margin: "0", padding: "0"}}>
+                                    <Col>
+                                        <CardTitle>Adicionar certificado</CardTitle>
+                                    </Col>
+
+                                    <Col xs="auto">
+                                        Usuário: {this.state.usuario.nome} | Deslogar
+                                    </Col>
+                                </Row>
+                                <hr />
+                            </CardHeader>
                             <CardBody>
-                                <CardAuthor
-                                    avatar={avatar}
-                                    avatarAlt="Avatar"
-                                />
-                                <h2>Login</h2>
-                                <Form className="form">
-                                    <Col>
-                                        <FormGroup>
-                                            <Label for="email">Email</Label>
-                                            <InputGroup>
-                                                <InputGroupAddon addonType="prepend" className="d-input-icon"><i className="nc-icon nc-single-02"></i></InputGroupAddon>
-                                                <Input
-                                                    type="email"
-                                                    name="email"
-                                                    id="email"
-                                                    placeholder="meuemail@email.com"
-                                                    value={this.props.email}
-                                                    onChange={e => this.setState({ email: e.target.value })}
-                                                    invalid={!!this.state.emailFeedBack.length}
-                                                />
-                                                <FormFeedback> {this.state.emailFeedBack} </FormFeedback>
-                                            </InputGroup>
-                                        </FormGroup>
-                                    </Col>
-                                    <Col>
-                                        <FormGroup>
-                                            <Label for="password">Password</Label>
-                                            <InputGroup>
-                                                <InputGroupAddon addonType="prepend" className="d-input-icon"><i className="nc-icon nc-key-25"></i></InputGroupAddon>
-                                                <Input
-                                                    type="password"
-                                                    name="password"
-                                                    id="password"
-                                                    placeholder="********"
-                                                    value={this.props.senha}
-                                                    onChange={e => this.setState({ senha: e.target.value })}
-                                                    invalid={!!this.state.senhaFeedBack.length}
-                                                />
-                                                <FormFeedback> {this.state.senhaFeedBack} </FormFeedback>
-                                            </InputGroup>
-                                        </FormGroup>
-                                    </Col>
-                                    <Button onClick={this.logarClick}>Logar</Button>
-                                    {this.props.tipoConta === 'administrador' && (
-                                        <Button>Cadastrar</Button>
+                                Vários inputs bonitos para adicionar certificado
+                            </CardBody>
+                        </Card>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col md={12}>
+                        <Card>
+                            <CardHeader>
+                                <CardTitle>Lista de certificados adicionados</CardTitle>
+                                <hr />
+                            </CardHeader>
+                            <CardBody>
+                                {!this.state.usuario.certificados.length ? (
+                                    <div className="d-center">
+                                        <i className="nc-icon nc-alert-circle-i text-warning d-circle d-box-40" />
+                                        <h3>Nenhum certificado adicionado por essa conta</h3>
+                                    </div>
+                                ) : (
+                                        <Fragment>
+                                            {this.state.usuario.certificados.map((data, key) => {
+                                                return (
+                                                    <CertificadosList key={key} chave={key} data={data} />
+                                                )
+                                            })}
+                                        </Fragment>
                                     )}
-                                </Form>
                             </CardBody>
                         </Card>
                     </Col>

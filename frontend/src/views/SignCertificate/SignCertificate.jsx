@@ -41,19 +41,6 @@ class SignCertificate extends Component {
       });
     }
 
-    /*
-    const rt = await api.post('/certificado', {
-      nome: 'Aluno Y',
-      email: 'email@gmail.com',
-      titulo: 'Minicurso de React',
-      dataDoCurso: Date.now(),
-      duracao: '120',
-      nomeDoInstrutor: 'nome do instrutor'
-    });
-    
-
-    console.log(rt);
-    */
     this.setState({ certificados: retorno.data });
   }
 

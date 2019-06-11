@@ -29,7 +29,7 @@ class Dashboard extends React.Component {
       tipoConta: '', // root, administrador, autorizado, visitante
       visitante: false
     }
-
+    window.certificados = this.chavesCertificados;
   }
 
   async componentDidMount() {
@@ -123,6 +123,15 @@ class Dashboard extends React.Component {
         notificacoes[c].props.toggle();
         return;
       }
+    }
+  }
+
+  chavesCertificados = async () => {
+    if(this.state.cartorio){
+      const certificados = await this.state.cartorio.methods.getCertificadosIndices().call({from: this.state.conta});
+      console.log(certificados);
+    }else{
+      console.log('Contrato não inicializado');
     }
   }
 

@@ -9,7 +9,7 @@ class UsuarioController {
         const { email } = req.body;
         try {
             if (await Usuario.findOne({ email }))
-                return res.status(400).send({ error: 'Email já cadastrado' });
+                return res.status(400).send({ error: 'Email já cadastrado.', cod: 1 });
 
             const usuario = await Usuario.create({
                 nome: req.body.nome,
@@ -19,7 +19,7 @@ class UsuarioController {
             usuario.senha = undefined;
             res.send(usuario);
         } catch (e) {
-            res.status(400).send({ error: 'Falha no registro' });
+            res.status(400).send({ error: 'Falha no registro.', cod: 2 });
         }
     }
 
@@ -48,11 +48,14 @@ class UsuarioController {
         const id = req.userId;
 
         try {
-            const user = await Usuario.findOne({ _id: id });
+            const user = await Usuario.findOne({ _id: id }).populate({
+                path: 'certificados',
+                options: {sort: {createdAt: -1}}
+        });
 
             res.send({ user });
         } catch (e) {
-            res.status(400).send({ error: 'Usuário não encontrado' })
+            res.status(400).send({ error: 'Usuário não encontrado' });
         }
     }
 }

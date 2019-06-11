@@ -13,6 +13,7 @@ routes.get('/token', authMiddleware, (req,res) => res.json({error: false}));
 
 routes.post('/certificado', authMiddleware, certificadoController.armazenar);
 routes.put('/certificado/:id',certificadoController.atualiza);
+routes.get('/certificado/:id',certificadoController.getCertificadoById);
 routes.get('/certificados', certificadoController.certificados);
 
 module.exports = routes; // Exporta informações do arquivo, no caso a variável "routes"
