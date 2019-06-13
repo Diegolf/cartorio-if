@@ -169,9 +169,9 @@ class SignCertificate extends Component {
                         <Col xs="12"><strong>Data do Curso:</strong> {new Date(parseInt(this.state.certificado.dataDoCurso)).toLocaleDateString()} </Col>
                         <Col xs="12"><strong>Duração:</strong> {this.state.certificado.duracao} minutos</Col>
                         <Col xs="12"><strong>Nome do instrutor:</strong> {this.state.certificado.nomeDoInstrutor} </Col>
-                        <Col xs="12"><strong>Adicionado em:</strong> {new Date(parseInt(this.state.certificado.dataDaTransacao) * 1000).toLocaleString()} </Col>
+                        <Col xs="12"><strong>Assinado em:</strong> {new Date(parseInt(this.state.certificado.dataDaTransacao) * 1000).toLocaleString()} </Col>
                         <Col xs="12">
-                          <strong>Adicionado por {this.state.certificado.adicionadoPeloAdm ? ' (Administrador)' : ''}:</strong> {this.state.certificado.enderecoDoAutor}
+                          <strong>Assinado por {this.state.certificado.adicionadoPeloAdm ? ' (Administrador)' : ''}:</strong> {this.state.certificado.enderecoDoAutor}
                         </Col>
                         {(!this.state.certificado.valido) ? (
                           <Fragment>

@@ -6,15 +6,13 @@ const authConfig = require('../config/auth');
 class UsuarioController {
 
     async registro(req, res) {
-        const { email } = req.body;
+        const { email, nome, senha } = req.body;
         try {
             if (await Usuario.findOne({ email }))
                 return res.status(400).send({ error: 'Email já cadastrado.', cod: 1 });
 
             const usuario = await Usuario.create({
-                nome: req.body.nome,
-                email: req.body.email,
-                senha: req.body.senha
+                nome, email, senha
             });
             usuario.senha = undefined;
             res.send(usuario);

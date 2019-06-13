@@ -16,7 +16,7 @@ class CertificadoController {
         try {
             usuario = await Usuario.findById(userId).select('+senha');
         } catch (e) {
-            return res.status(400).send({ error: 'Usuário não encontrado ou inválido' });
+            return res.status(400).send({ error: 'Usuário não encontrado ou inválido', cod: 1 });
         }
 
         try {
@@ -29,7 +29,7 @@ class CertificadoController {
 
             return res.send(certificado);
         } catch (e) {
-            return res.status(400).send({ error: 'Erro ao adicionar certificado' });
+            return res.status(400).send({ error: 'Erro ao adicionar certificado', cod: 2});
         }
 
     }

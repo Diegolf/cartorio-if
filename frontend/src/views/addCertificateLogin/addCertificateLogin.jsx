@@ -48,7 +48,8 @@ class AddCertificateLogin extends Component {
     }
 
     logarClick = async (e) => {
-        e.preventDefault();
+        if (e)
+            e.preventDefault();
         const email = this.state.email;
         const senha = this.state.senha;
 
@@ -89,7 +90,7 @@ class AddCertificateLogin extends Component {
                 message: `Seja bem vindo, ${retorno.data.usuario.nome}`,
                 icon: 'nc-icon nc-check-2',
                 type: 'success',
-                time: 15
+                time: 6
             });
             this.props.history.replace('/adicionar-certificado');
         } catch (e) {
@@ -238,6 +239,12 @@ class AddCertificateLogin extends Component {
         }
     }
 
+    inputKeyPress = (e) => {
+        if (e.key === 'Enter') {
+          this.logarClick();
+        }
+    }
+
     render() {
         return (
             <div className="content" >
@@ -291,6 +298,7 @@ class AddCertificateLogin extends Component {
                                                             value={this.props.senha}
                                                             onChange={e => this.setState({ senha: e.target.value })}
                                                             invalid={!!this.state.senhaFeedBack.length}
+                                                            onKeyUp={this.inputKeyPress}
                                                         />
                                                         <FormFeedback> {this.state.senhaFeedBack} </FormFeedback>
                                                     </InputGroup>
