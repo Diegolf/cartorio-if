@@ -4,7 +4,8 @@ frontend/src/services/.dados.js
 backend/src/.mongooseConnection.js
 ideia.txt
 */node_modules
-frontend2/*
+backend/.env
+frontend/.env
 
 /.pnp
 .pnp.js
