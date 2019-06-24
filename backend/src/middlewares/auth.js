@@ -1,5 +1,4 @@
 const jwt = require('jsonwebtoken');
-const authConfig = require('../config/auth');
 
 module.exports = (req, res, next) => {
     const authHeader = req.headers.autorizacao;
@@ -17,7 +16,7 @@ module.exports = (req, res, next) => {
     if (!/^Bearer$/i.test(scheme))
         return res.status(401).send({ error: 'Token mal formado', cod: 3 });
 
-    jwt.verify(token, authConfig.segredo, (err, decoded) => {
+    jwt.verify(token, process.env.SERVER_HASH, (err, decoded) => {
         if (err)
             return res.status(401).send({ error: 'Token inválido ou expirado', cod: 4 });
 

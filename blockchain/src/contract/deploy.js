@@ -1,10 +1,10 @@
+require('dotenv').config(); 
 const HDWalletProvider = require('truffle-hdwallet-provider'); // biblioteca para gerenciar as carteiras
 const Web3 = require('web3'); // Portal para conectar às networks da ethereum
 const fs = require('fs'); // módulo de arquivo de sistema, usado para ler o conetúdo do arquivo
 const { abi, bytecode } = require('./.contrato_compilado.js');
-const { mnemonic, url_network } = require('./.dados.js');
 
-const provider = new HDWalletProvider(mnemonic, url_network);
+const provider = new HDWalletProvider(process.env.MNEMONIC, process.env.URL_NETWORK);
 
 const web3 = new Web3(provider);
 

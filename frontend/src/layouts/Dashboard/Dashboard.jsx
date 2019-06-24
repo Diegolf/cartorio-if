@@ -12,7 +12,7 @@ import NotificationAlert from "react-notification-alert";
 
 import dashboardRoutes from "routes/dashboard.jsx";
 
-import { abi, enderecoContrato } from "contracts/cartorio.js";
+import { abi } from "contracts/cartorio.js";
 import { web3, tipoLogin } from "services/web3.js";
 
 var ps;
@@ -38,7 +38,7 @@ class Dashboard extends React.Component {
       document.body.classList.toggle("perfect-scrollbar-on");
     }
 
-    const cartorio = await new web3.eth.Contract(JSON.parse(abi), enderecoContrato);
+    const cartorio = await new web3.eth.Contract(JSON.parse(abi), process.env.REACT_APP_ENDERECO_CONTRATO);
     const contas = await web3.eth.getAccounts();
     let tipoConta;
 

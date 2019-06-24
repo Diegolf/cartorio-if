@@ -1,7 +1,7 @@
 import axios from 'axios'; // Cliente HTTP
 
 const api = axios.create({
-    baseURL : 'https://cartorio-if-backend.herokuapp.com'//'http://localhost:3333'
+    baseURL : process.env.REACT_APP_API_URL
 });
 
 export default api;

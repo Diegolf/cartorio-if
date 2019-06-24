@@ -113,7 +113,7 @@ class AddCertificateLogin extends Component {
                 });
             } else {
                 this.props.funcoes.notify({
-                    message: 'Não fo possivel conectar ao servidor. Nenhum certificado carregado.',
+                    message: 'Não fo possivel conectar ao servidor. Tente novamente mais tarde.',
                     icon: 'nc-icon nc-simple-remove',
                     type: 'danger'
                 });

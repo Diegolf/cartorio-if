@@ -1,6 +1,5 @@
 import Web3 from 'web3';
 import HDWalletProvider from 'truffle-hdwallet-provider';
-import { mnemonic, url_network } from './.dados.js';
 
 let web3;
 let tipoLogin;
@@ -22,7 +21,7 @@ async function verificarWeb3(){
 }
 
 function loginPadrao() {
-    const provider = new HDWalletProvider(mnemonic, url_network);
+    const provider = new HDWalletProvider(process.env.REACT_APP_MNEMONIC, process.env.REACT_APP_URL_NETWORK);
     web3 = new Web3(provider);
     tipoLogin = 'padrao';
 }

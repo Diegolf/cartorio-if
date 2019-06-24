@@ -28,6 +28,7 @@ class Dashboard extends React.Component {
           <Col xs={12} sm={6} md={6} lg={3}>
             <Card className="card-stats">
               <CardBody>
+                {console.log('Ola: ', process.env.REACT_APP_ENDERECO_CONTRATO)}
                 <Row>
                   <Col xs={5} md={4}>
                     <div className="icon-big text-center">

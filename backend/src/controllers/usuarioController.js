@@ -1,7 +1,6 @@
 const Usuario = require('../models/Usuario');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const authConfig = require('../config/auth');
 
 class UsuarioController {
 
@@ -29,10 +28,11 @@ class UsuarioController {
             if (!usuario)
                 return res.status(400).send({ error: 'Usuario não encontrado.', cod: 1 });
 
-            if (!await bcrypt.compare(senha, usuario.senha))
+            const valido = await bcrypt.compare(senha, usuario.senha);
+            if (!valido)
                 return res.status(400).send({ error: 'Senha incorreta.', cod: 2 });
 
-            const token = jwt.sign({ id: usuario._id }, authConfig.segredo, { expiresIn: 3600 });
+            const token = jwt.sign({ id: usuario._id }, process.env.SERVER_HASH, { expiresIn: 3600 });
 
             usuario.senha = undefined;
             return res.send({ usuario, token });
@@ -48,8 +48,8 @@ class UsuarioController {
         try {
             const user = await Usuario.findOne({ _id: id }).populate({
                 path: 'certificados',
-                options: {sort: {createdAt: -1}}
-        });
+                options: { sort: { createdAt: -1 } }
+            });
 
             res.send({ user });
         } catch (e) {
