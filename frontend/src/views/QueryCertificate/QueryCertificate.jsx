@@ -14,6 +14,8 @@ import {
   Col,
 } from "reactstrap";
 
+import QRCode from 'qrcode.react';
+
 class SignCertificate extends Component {
   constructor(props) {
     super(props);
@@ -65,17 +67,30 @@ class SignCertificate extends Component {
   }
 
   buscarCertificado = async () => {
+    const chave = this.state.inputValue;
+
+    if (chave.length < 50) {
+      this.props.funcoes.notify({
+        message: 'Infome a chave do certificado ou utilize o leitor de QRCode',
+        icon: 'nc-icon nc-simple-remove',
+        type: 'danger'
+      });
+
+      this.setState({ emailFeedBack: 'Informe o email' });
+      return;
+    }
+
 
     try {
-      const certificado = await this.props.cartorio.methods.getCertificado(this.state.inputValue)
+      const certificado = await this.props.cartorio.methods.getCertificado(chave)
         .call({ from: this.props.conta });
 
-      const certificadoInfo = await this.props.cartorio.methods.getInformacoesCertificado(this.state.inputValue)
+      const certificadoInfo = await this.props.cartorio.methods.getInformacoesCertificado(chave)
         .call({ from: this.props.conta });
 
       this.setState({
         certificado: {
-          chave: this.state.inputValue,
+          chave,
           titulo: certificado.titulo,
           nome: certificado.nome,
           email: certificado.email,
@@ -172,6 +187,9 @@ class SignCertificate extends Component {
                         <Col xs="12"><strong>Assinado em:</strong> {new Date(parseInt(this.state.certificado.dataDaTransacao) * 1000).toLocaleString()} </Col>
                         <Col xs="12">
                           <strong>Assinado por {this.state.certificado.adicionadoPeloAdm ? ' (Administrador)' : ''}:</strong> {this.state.certificado.enderecoDoAutor}
+                        </Col>
+                        <Col xs="12" style={{ margin: "15px 0" }}>
+                          <QRCode value={this.state.certificado.chave} size={150}></QRCode>
                         </Col>
                         {(!this.state.certificado.valido) ? (
                           <Fragment>

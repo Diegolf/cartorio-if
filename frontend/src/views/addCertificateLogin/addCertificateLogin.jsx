@@ -50,8 +50,7 @@ class AddCertificateLogin extends Component {
     logarClick = async (e) => {
         if (e)
             e.preventDefault();
-        const email = this.state.email;
-        const senha = this.state.senha;
+        const { email, senha } = this.state;
 
         if (!email) {
             this.props.funcoes.notify({
@@ -95,6 +94,7 @@ class AddCertificateLogin extends Component {
             this.props.history.replace('/adicionar-certificado');
         } catch (e) {
             if (e.response) {
+                console.log(e.response.data.error);
                 switch (e.response.data.cod) {
                     case 1: { // email
                         this.setState({ emailFeedBack: 'Email não cadastrado' });
@@ -113,7 +113,7 @@ class AddCertificateLogin extends Component {
                 });
             } else {
                 this.props.funcoes.notify({
-                    message: 'Não fo possivel conectar ao servidor. Tente novamente mais tarde.',
+                    message: 'Não foi possivel conectar ao servidor. Tente novamente mais tarde.',
                     icon: 'nc-icon nc-simple-remove',
                     type: 'danger'
                 });
@@ -180,7 +180,7 @@ class AddCertificateLogin extends Component {
             this.setState({ csenha2FeedBack: '' });
         }
 
-        if (senha !== senha2){
+        if (senha !== senha2) {
             this.props.funcoes.notify({
                 message: 'A senha e a confirmação de senha não coincidem.',
                 icon: 'nc-icon nc-simple-remove',
@@ -206,6 +206,7 @@ class AddCertificateLogin extends Component {
             });
         } catch (e) {
             if (e.response) {
+                console.log(e.response.data.error);
                 switch (e.response.data.cod) {
                     case 1: { // email
                         this.setState({ cemailFeedBack: 'Email já cadastrado' });
@@ -227,7 +228,7 @@ class AddCertificateLogin extends Component {
             }
             return;
         }
-        this.setState({cnome: '', cemail: '', csenha: '', csenha2: ''});
+        this.setState({ cnome: '', cemail: '', csenha: '', csenha2: '' });
         this.toggleTab('tb1');
     }
 
@@ -241,7 +242,7 @@ class AddCertificateLogin extends Component {
 
     inputKeyPress = (e) => {
         if (e.key === 'Enter') {
-          this.logarClick();
+            this.logarClick();
         }
     }
 

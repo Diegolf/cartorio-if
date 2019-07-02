@@ -57,6 +57,7 @@ class AddCertificate extends Component {
 
         } catch (e) {
             if (e.response) {
+                console.log(e.response.data.error);
                 localStorage.removeItem('usr');
                 switch (e.response.data.cod) {
                     case 1: case 2: case 3: {
@@ -99,6 +100,7 @@ class AddCertificate extends Component {
             this.setState({ usuario: retorno.data.user })
         } catch (e) {
             if (e.response) {
+                console.log(e.response.data.error);
                 localStorage.removeItem('usr');
                 this.props.history.replace('/adicionar-certificado/login');
 
@@ -220,6 +222,7 @@ class AddCertificate extends Component {
             this.setState({nome: '', email: '', usuario});
         } catch (e) {
             if (e.response) {
+                console.log(e.response.data.error);
                 switch (e.response.data.cod) {
                     case 1: {
                         this.props.funcoes.notify({

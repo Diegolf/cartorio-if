@@ -36,18 +36,22 @@ class CertificadoController {
 
     async atualiza(req, res) {
         const { id } = req.params;
+        const { chave } = req.body;
+
+        if (!chave)
+            return res.status(400).send({ error: 'Chave não informada.', cod: 1 });
 
         if (id) {
 
             try {
-                await Certificado.updateOne({ _id: req.params.id }, { assinado: true });
+                await Certificado.updateOne({ _id: req.params.id }, { assinado: true, chave });
                 return res.status(200).send({ error: false });
             } catch (e) {
-                return res.status(200).send({ error: 'Erro ao tentar modificar o certificado' });
+                return res.status(400).send({ error: 'Erro ao tentar modificar o certificado', cod: 2 });
             }
 
         } else {
-            return res.status(400).send({ error: 'ID não informado.' });
+            return res.status(400).send({ error: 'ID não informado.', cod: 3 });
         }
     }
 

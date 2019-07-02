@@ -20,6 +20,7 @@ var ps;
 class Dashboard extends React.Component {
   constructor(props) {
     super(props);
+    this.realizandoOperacao = this.realizandoOperacao.bind(this);
     this.state = {
       backgroundColor: "black",
       activeColor: "warning",
@@ -38,22 +39,24 @@ class Dashboard extends React.Component {
       document.body.classList.toggle("perfect-scrollbar-on");
     }
 
+    window.op = this.realizandoOperacao;
+
     const cartorio = await new web3.eth.Contract(JSON.parse(abi), process.env.REACT_APP_ENDERECO_CONTRATO);
     const contas = await web3.eth.getAccounts();
     let tipoConta;
 
     if (tipoLogin === 'metamask') {
-      const isAutorizado = await cartorio.methods.isAutorizado(contas[0]).call({from: contas[0]});
+      const isAutorizado = await cartorio.methods.isAutorizado(contas[0]).call({ from: contas[0] });
 
       if (isAutorizado) {
         tipoConta = 'autorizado';
       } else {
-        const administrador = await cartorio.methods.administrador().call({from: contas[0]});
+        const administrador = await cartorio.methods.administrador().call({ from: contas[0] });
 
         if (administrador === contas[0]) {
           tipoConta = 'administrador';
         } else {
-          const root = await cartorio.methods.root().call({from: contas[0]});
+          const root = await cartorio.methods.root().call({ from: contas[0] });
 
           if (root === contas[0]) {
             tipoConta = 'root';
@@ -91,6 +94,16 @@ class Dashboard extends React.Component {
   continuarComoVisitante() {
     this.setState({ visitante: true });
   }
+  realizandoOperacao(operando = false, mensagem = "") {
+    window.onbeforeunload = function (e) {
+      if(operando){
+        e.returnValue = mensagem;
+        return mensagem;
+      }else{
+        return;
+      }
+    };
+  }
 
   // place= "tl", "tc", "tr", "bl", "bc", "br" # type: "primary", "info", "success", "danger", "warning"
   notify({ message, time = 6, place = "tr", type = "info", icon = "nc-icon nc-bell-55" }) { // 
@@ -101,11 +114,11 @@ class Dashboard extends React.Component {
           {message}
         </div>
       ) : (
-        <div className="d-alert-painel">
-          <div className="d-dual-ring"></div>
-          <div className="d-dual-ring-message">{message}</div>
-        </div>
-      ),
+          <div className="d-alert-painel">
+            <div className="d-dual-ring"></div>
+            <div className="d-dual-ring-message">{message}</div>
+          </div>
+        ),
       type: type,
       icon: icon ? icon : '',
       autoDismiss: time
@@ -127,10 +140,10 @@ class Dashboard extends React.Component {
   }
 
   chavesCertificados = async () => {
-    if(this.state.cartorio){
-      const certificados = await this.state.cartorio.methods.getCertificadosIndices().call({from: this.state.conta});
+    if (this.state.cartorio) {
+      const certificados = await this.state.cartorio.methods.getCertificadosIndices().call({ from: this.state.conta });
       console.log(certificados);
-    }else{
+    } else {
       console.log('Contrato não inicializado');
     }
   }
@@ -169,6 +182,7 @@ class Dashboard extends React.Component {
                         continuarComoVisitante: (prop.path === '/metamaskloggedout' ? this.continuarComoVisitante.bind(this) : ''),
                         notify: this.notify.bind(this),
                         notifyDismiss: this.notifyDismiss.bind(this),
+                        realizandoOperacao: this.realizandoOperacao
                       }}
                     />}
                   key={key}

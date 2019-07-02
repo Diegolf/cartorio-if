@@ -5,6 +5,7 @@ import { Row, Col, Collapse, Button } from 'reactstrap';
 import { distanceInWords } from 'date-fns';
 import pt from 'date-fns/locale/pt';
 import Moment from 'react-moment';
+import QRCode from 'qrcode.react';
 
 export default class CertificadosList extends Component {
     constructor(props) {
@@ -33,9 +34,16 @@ export default class CertificadosList extends Component {
                         <Col xs="auto"><strong>Nome do instrutor:</strong> {this.props.data.nomeDoInstrutor} </Col>
                         <Col xs="auto">Há {distanceInWords(this.props.data.createdAt, new Date(), { locale: pt })} </Col>
                         {!this.props.assinarCertificado && (
-                            <Col xs="auto" className={this.props.data.assinado ? 'text-success' : 'text-warning'}>
-                                {this.props.data.assinado ? 'Assinado !' : 'Não assinado ainda.'}
-                            </Col>
+                            <Fragment>
+                                <Col xs="auto" className={this.props.data.assinado ? 'text-success' : 'text-warning'}>
+                                    {this.props.data.assinado ? 'Assinado !' : 'Não assinado ainda.'}
+                                </Col>
+                                {this.props.data.assinado && (
+                                    <Col xs="auto" style={{marginTop: '15px'}}>
+                                        <QRCode value={this.props.data.chave}></QRCode>
+                                    </Col>
+                                )}
+                            </Fragment>
                         )}
                     </Row>
                     <Row className="d-center">

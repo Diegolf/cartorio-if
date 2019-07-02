@@ -70,8 +70,31 @@ class SignCertificate extends Component {
           time: 40
         });
 
+        try {
+          await api.put('/certificado/' + certificado._id, { chave: res.returnValues.id });
+          this.props.funcoes.realizandoOperacao(false);
+        } catch (e) {
+          if (e.response) {
+            console.log(e.response.data.error);
+            
+            this.props.funcoes.notify({
+              message: `${e.response.data.error} ${e.response.data.code === 2 ? 'Notifique um administrador, por favor.' : ''}`,
+              icon: 'nc-icon nc-simple-remove',
+              type: 'danger'
+            });
+          } else {
+            this.props.funcoes.notify({
+              message: 'Não foi possivel conectar ao servidor para incluir a chave do certificado assinado. Tente novamente mais tarde.',
+              icon: 'nc-icon nc-simple-remove',
+              type: 'danger'
+            });
+          }
+        }
+
       }
     });
+
+    this.props.funcoes.realizandoOperacao(true, "Aguarde a confirmação da transação para poder armazenar a chave do certificado no backend.");
 
     try {
       await this.props.cartorio.methods.adicionarCertificado(
@@ -86,7 +109,6 @@ class SignCertificate extends Component {
         time: 15
       });
 
-      await api.put('/certificado/' + certificado._id);
       let certificados = this.state.certificados;
       delete certificados[chave];
       this.setState({ certificados });

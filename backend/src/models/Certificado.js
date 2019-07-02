@@ -28,6 +28,9 @@ const Certificado = new mongoose.Schema({
     assinado: {
         type: Boolean,
         default: false
+    },
+    chave: {
+        type: String
     }
 }, {
         timestamps: true, // Cria os campos createdAt e updatedAt
