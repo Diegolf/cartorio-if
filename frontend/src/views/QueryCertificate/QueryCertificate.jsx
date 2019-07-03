@@ -12,14 +12,23 @@ import {
   Collapse,
   Row,
   Col,
+  UncontrolledTooltip,
+  Modal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter
 } from "reactstrap";
 
 import QRCode from 'qrcode.react';
+import QRReader from 'react-qr-reader';
 
 class SignCertificate extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      modal: false,
+      legacyMode: false,
+      QRFeedBack: '',
       certificado: '',
       inputValue: '',
       certificados: ['carregando'],
@@ -145,9 +154,54 @@ class SignCertificate extends Component {
     this.props.funcoes.notifyDismiss(notificacaoID);
   }
 
+  toggleModal = () => {
+    this.setState(prevState => ({
+      modal: !prevState.modal
+    }));
+  }
+
+  handleScan = async data => {
+    if (data) {
+      await this.setState({
+        inputValue: data
+      });
+      this.setState({legacyMode:false});
+      await this.toggleModal();
+      this.buscarCertificado();
+    }
+  }
+  openImageDialog = async () => {
+    await this.setState({ legacyMode: true });
+    this.refs.qrReader.openImageDialog();
+  }
+  handleError = err => {
+    if (err.name === 'NotFoundError') {
+      this.setState({QRFeedBack: 'Nenhuma câmera disponível.'});
+    } else {
+      this.setState({QRFeedBack: 'Ocorreu um erro na leitura.'});
+    }
+  }
+
   render() {
     return (
       <div className="content">
+        <Modal isOpen={this.state.modal} toggle={this.toggleModal}>
+          <ModalHeader toggle={this.toggleModal}>Leitor de QRCode</ModalHeader>
+          <ModalBody>
+            <QRReader
+              ref="qrReader"
+              delay={400}
+              onError={this.handleError}
+              onScan={this.handleScan}
+              legacyMode={this.state.legacyMode}
+            />
+          </ModalBody>
+          <ModalFooter>
+            <Col><p style={{ color: 'red', fontSize: '15px' }}>{this.state.QRFeedBack}</p></Col>
+            <Button color="secondary" onClick={this.openImageDialog}>Abrir Imagem...</Button>{'  '}
+            <Button color="secondary" onClick={this.toggleModal}>Cancel</Button>
+          </ModalFooter>
+        </Modal>
         <Row>
           <Col md={12}>
             <Card>
@@ -158,6 +212,14 @@ class SignCertificate extends Component {
               <CardBody className="d-center">
                 <h5>Digite a chave do certificado</h5>
                 <InputGroup className="no-border d-marginlr">
+                  <InputGroupAddon addonType="prepend">
+                    <InputGroupText onClick={this.toggleModal} id="qrRead" style={{ cursor: "pointer", padding: "5px 12px", backgroundColor: "#ccc", color: "#000" }}>
+                      <i className="nc-icon nc-touch-id" />
+                    </InputGroupText>
+                    <UncontrolledTooltip placement="bottom" target="qrRead">
+                      Ler QRCode
+                    </UncontrolledTooltip>
+                  </InputGroupAddon>
                   <Input
                     value={this.state.inputValue}
                     onKeyPress={this.inputKeyPress}
@@ -165,9 +227,12 @@ class SignCertificate extends Component {
                     placeholder="Ex: 0x123abc"
                   />
                   <InputGroupAddon addonType="append">
-                    <InputGroupText onClick={this.buscarCertificado} style={{ cursor: "pointer", padding: "5px 10px" }}>
+                    <InputGroupText onClick={this.buscarCertificado} id="buscar" style={{ cursor: "pointer", padding: "5px 12px", backgroundColor: "#ccc", color: "#000" }}>
                       <i className="nc-icon nc-zoom-split" />
                     </InputGroupText>
+                    <UncontrolledTooltip placement="bottom" target="buscar">
+                      Buscar
+                    </UncontrolledTooltip>
                   </InputGroupAddon>
                 </InputGroup>
                 {this.state.certificado && (
@@ -240,3 +305,4 @@ class SignCertificate extends Component {
 }
 
 export default SignCertificate;
+ 
