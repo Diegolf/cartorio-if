@@ -29,12 +29,14 @@
     "react-router-dom": "4.3.1",
     "react-scripts": "2.0.4",
     "reactstrap": "6.5.0",
+    "serve": "^11.1.0",
     "truffle-hdwallet-provider": "^1.0.9",
     "web3": "1.0.0-beta.37"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "production": "serve -s build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "scss": "node-sass --include-path ./src --include-path ./node_modules src/ -o src/",

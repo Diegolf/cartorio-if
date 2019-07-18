@@ -16,3 +16,4 @@ app.use(express.json()); // ajuda a entender as informações em formato json
 app.use(require('./routes.js')); // Para poder utilizar o arquivo de rotas
 
 server.listen(process.env.PORT || 3333);
+console.log('Back-end funcionando na porta:',(process.env.PORT || 3333));

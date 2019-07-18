@@ -39,7 +39,7 @@ export default class CertificadosList extends Component {
                                     {this.props.data.assinado ? 'Assinado !' : 'Não assinado ainda.'}
                                 </Col>
                                 {this.props.data.assinado && (
-                                    <Col xs="auto" style={{marginTop: '15px'}}>
+                                    <Col xs="auto" style={{ marginTop: '15px' }}>
                                         <QRCode value={this.props.data.chave}></QRCode>
                                     </Col>
                                 )}

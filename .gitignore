@@ -3,6 +3,9 @@ blockchain/src/contract/.dados.js
 frontend/src/services/.dados.js
 backend/src/.mongooseConnection.js
 ideia.txt
+backend_docker.sh
+frontend_docker.sh
+blockchain_docker.sh
 */node_modules
 backend/.env
 blockchain/.env
