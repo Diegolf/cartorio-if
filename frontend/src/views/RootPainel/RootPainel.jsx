@@ -63,7 +63,7 @@ class RootPainel extends React.Component {
     this.setState({ enderecoNovoAdmError: false, enderecoNovoAdmMessage: '' });
     
     const notificacaoID = this.props.funcoes.notify({
-      message: 'Transação enviada, aguardando confirmação ...',
+      message: 'Transação enviada. Aguardando a validação pela rede blockchain ...',
       icon: false,
       type: 'info',
       time: 200
@@ -112,7 +112,7 @@ class RootPainel extends React.Component {
     }
 
     const notificacaoID = this.props.funcoes.notify({
-      message: 'Transação enviada, aguardando confirmação ...',
+      message: 'Transação enviada. Aguardando a validação pela rede blockchain ...',
       icon: false,
       type: 'info',
       time: 200

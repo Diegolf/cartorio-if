@@ -45,6 +45,13 @@ class AddCertificateLogin extends Component {
 
     componentWillMount() {
         document.title = "Cartório IF - " + this.props.pageName;
+
+        const token = localStorage.getItem('usr');
+
+        if (token){
+            this.props.history.replace('/adicionar-certificado');
+        }
+
     }
 
     logarClick = async (e) => {

@@ -44,15 +44,15 @@ var dashRoutes = [
     component: QueryCertificate
   },
   {
+    hidden: true,
     path: "/adicionar-certificado",
     name: "Adicionar Certificado",
     icon: "nc-icon nc-paper",
     component: AddCertificate
   },
   {
-    hidden: true,
     path: "/adicionar-certificado/login",
-    name: "Adicionar Certificado",
+    name: "Login",
     icon: "nc-icon nc-paper",
     component: AddCertificateLogin
   },

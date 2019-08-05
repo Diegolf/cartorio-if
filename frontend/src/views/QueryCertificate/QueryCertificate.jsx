@@ -259,7 +259,7 @@ class SignCertificate extends Component {
                         {(!this.state.certificado.valido) ? (
                           <Fragment>
                             <Col xs="12" className="d-red"><strong>Invalidado por:</strong> {this.state.certificado.enderecoInvalidador}</Col>
-                            <Col xs="12" className="d-red"><strong>Envalidado em:</strong> {new Date(parseInt(this.state.certificado.dataInvalidacao) * 1000).toLocaleString()} </Col>
+                            <Col xs="12" className="d-red"><strong>Invalidado em:</strong> {new Date(parseInt(this.state.certificado.dataInvalidacao) * 1000).toLocaleString()} </Col>
                           </Fragment>
                         ) : (this.props.conta === this.state.certificado.enderecoDoAutor || this.props.tipoConta === 'administrador') && (
                           <Col xs="12">

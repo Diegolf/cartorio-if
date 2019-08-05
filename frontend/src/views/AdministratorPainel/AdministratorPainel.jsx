@@ -105,7 +105,7 @@ class AutorizadoinistratorPainel extends React.Component {
     this.setState({ enderecoNovoAutorizadoError: false, enderecoNovoAutorizadoMessage: '' });
 
     const notificacaoID = this.props.funcoes.notify({
-      message: 'Transação enviada, aguardando confirmação ...',
+      message: 'Transação enviada. Aguardando a validação pela rede blockchain ...',
       icon: false,
       type: 'info',
       time: 200
