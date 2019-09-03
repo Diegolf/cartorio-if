@@ -320,6 +320,7 @@
   top: -17px; 
   margin: 0 5px 5px 5px;
   padding: 10px 10px 0 10px;
+  overflow: auto;
 }
 
 .d-icon {
@@ -381,6 +382,58 @@
   border: 5px solid #fff;
   border-color: #fff transparent #fff transparent;
   animation: lds-dual-ring 1.2s ease-in-out infinite;
+}
+
+#certificate_content{
+  border: solid 4px #808000;
+  margin: 15px;
+  padding: 15px;
+  display: grid;
+  grid-template-columns: 30fr 35fr 35fr;
+  grid-template-rows: auto;
+  grid-template-areas: "logo logo logo" "titulo titulo titulo" "texto texto texto" ". . data" "qr ass ass";
+  justify-content: center;
+  font-family: serif;
+}
+
+#certificate_logo {
+  grid-area: logo;
+  justify-content: center;
+  border: 1px solid;
+}
+
+#certificate_logo img {
+  height: 90%;
+}
+
+#certificate_titulo {
+  grid-area: titulo;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  font-style: italic;
+  color: #579d1c;
+  border: 1px solid;
+  font-size: 6vh;
+}
+
+#certificate_texto {
+  grid-area: texto;
+  padding-top: 10px;
+  border: 1px solid;
+}
+
+#certificate_data {
+  grid-area: data;
+  border: 1px solid;
+}
+
+#certificate_qr {
+  grid-area: qr;
+  border: 1px solid;
+}
+
+#certificate_ass {
+  grid-area: ass;
+  border: 1px solid;
 }
 
 @keyframes lds-dual-ring {

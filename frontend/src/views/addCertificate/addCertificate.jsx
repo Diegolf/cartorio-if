@@ -13,16 +13,24 @@ import {
     Input,
     InputGroup,
     InputGroupAddon,
-    Button
+    Button,
+    Modal,
+    ModalHeader,
+    ModalBody,
+    ModalFooter
 } from "reactstrap";
 
 import api from "services/api.js";
 import CertificadosList from "components/CertificadosList/CertificadosList.jsx";
+import CertificateSample from "components/CertificateSample/CertificateSample.jsx";
 
 class AddCertificate extends Component {
     constructor(props) {
         super(props);
+        this.gerarModeloCertificado = this.gerarModeloCertificado.bind(this);
         this.state = {
+            modal: false,
+            certificado: {},
             usuario: { certificados: [] },
             titulo: '',
             tituloFeedBack: '',
@@ -202,14 +210,14 @@ class AddCertificate extends Component {
 
         dataDoCurso = new Date(dataDoCurso.replace(/-/g, '/')).getTime();
         const tk = localStorage.getItem('usr');
-        
+
         try {
             const retorno = await api.post('/certificado', {
                 nome, email, titulo, dataDoCurso, duracao, nomeDoInstrutor
             }, {
-                headers: { autorizacao: `Bearer ${tk}` },
-            });
-            
+                    headers: { autorizacao: `Bearer ${tk}` },
+                });
+
             this.props.funcoes.notify({
                 message: 'Certificado adicionado ao servidor para ser assinado',
                 icon: 'nc-icon nc-check-2',
@@ -219,7 +227,7 @@ class AddCertificate extends Component {
             const usuario = this.state.usuario;
             usuario.certificados.push(retorno.data);
 
-            this.setState({nome: '', email: '', usuario});
+            this.setState({ nome: '', email: '', usuario });
         } catch (e) {
             if (e.response) {
                 console.log(e.response.data.error);
@@ -234,7 +242,7 @@ class AddCertificate extends Component {
                         //this.props.history.replace('/adicionar-certificado/login');
                         break;
                     }
-                    case 2: { 
+                    case 2: {
                         this.props.funcoes.notify({
                             message: 'Erro ao adicionar certificado. Tente novamente mais tarde.',
                             icon: 'nc-icon nc-simple-remove',
@@ -256,9 +264,32 @@ class AddCertificate extends Component {
         }
     }
 
+    async gerarModeloCertificado(certificado, chave) {
+        // Passar as informações para o modal
+        certificado.chave = chave;
+        await this.setState({certificado});
+        this.toggleModal();
+    }
+
+    toggleModal = () => {
+        this.setState(prevState => ({
+            modal: !prevState.modal
+        }));
+    }
+
     render() {
         return (
             <div className="content" >
+                <Modal isOpen={this.state.modal} toggle={this.toggleModal} size={"lg"}>
+                    <ModalHeader toggle={this.toggleModal}>Exemplo de Certificado</ModalHeader>
+                    <ModalBody className={"d-center"}>
+                        <CertificateSample data={this.state.certificado} />
+                    </ModalBody>
+                    <ModalFooter>
+                        <Button color="secondary" onClick={()=>{}}>Baixar...</Button>{'  '}
+                        <Button color="secondary" onClick={this.toggleModal}>Cancelar</Button>
+                    </ModalFooter>
+                </Modal>
                 <Row>
                     <Col md={12}>
                         <Card>
@@ -408,7 +439,7 @@ class AddCertificate extends Component {
                                         <Fragment>
                                             {this.state.usuario.certificados.map((data, key) => {
                                                 return (
-                                                    <CertificadosList key={key} chave={key} data={data} />
+                                                    <CertificadosList key={key} chave={key} data={data} gerarModeloCertificado={this.gerarModeloCertificado} />
                                                 )
                                             })}
                                         </Fragment>

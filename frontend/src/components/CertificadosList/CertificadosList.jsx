@@ -22,8 +22,8 @@ export default class CertificadosList extends Component {
         return (
             <Fragment>
                 <Row onClick={this.toggle} className="d-collapse-btn" style={{ marginBottom: '1rem' }}>
-                    <Col ><strong>Título:</strong> {this.props.data.titulo}</Col>
-                    <Col ><strong>Aluno</strong> {this.props.data.nome}</Col>
+                    <Col ><strong>Título: </strong> {this.props.data.titulo}</Col>
+                    <Col ><strong>Aluno: </strong> {this.props.data.nome}</Col>
                     <Col xs="auto" className="d-collapse-icon d-center"><i className="nc-icon nc-minimal-down" /></Col>
                 </Row>
                 <Collapse isOpen={this.state.collapse} className="d-collapse d-metal-gradient">
@@ -39,9 +39,13 @@ export default class CertificadosList extends Component {
                                     {this.props.data.assinado ? 'Assinado !' : 'Não assinado ainda.'}
                                 </Col>
                                 {this.props.data.assinado && (
-                                    <Col xs="auto" style={{ marginTop: '15px' }}>
-                                        <QRCode value={this.props.data.chave}></QRCode>
-                                    </Col>
+                                    <Fragment>
+                                        <Col xs="auto"><strong>Chave do certificado:</strong> {this.props.data.chave} </Col>
+                                        <Col xs="auto" style={{ marginTop: '15px' }}>
+                                            <QRCode value={this.props.data.chave}></QRCode>
+                                        </Col>
+                                        <Button onClick={() => { this.props.gerarModeloCertificado(this.props.data, this.props.chave) }} >Gerar Modelo de Certificado</Button>
+                                    </Fragment>
                                 )}
                             </Fragment>
                         )}

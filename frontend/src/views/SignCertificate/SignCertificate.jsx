@@ -62,14 +62,8 @@ class SignCertificate extends Component {
 
       if (res.returnValues.nome === certificado.nome) {
 
-        this.props.funcoes.notify({
-          message: 'Chave do certificado do ' + certificado.nome + ': ' + res.returnValues.id,
-          place: 'bc',
-          icon: 'nc-icon nc-key-25',
-          type: 'success',
-          time: 40
-        });
-
+        console.log('Chave do certificado do ' + certificado.nome + ': ' + res.returnValues.id);
+        
         try {
           await api.put('/certificado/' + certificado._id, { chave: res.returnValues.id });
           this.props.funcoes.realizandoOperacao(false);
