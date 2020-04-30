@@ -15,7 +15,7 @@
     "eslint-config-prettier": "^3.1.0",
     "eslint-plugin-prettier": "^3.0.0",
     "history": "4.7.2",
-    "jquery": "3.3.1",
+    "jquery": "3.5.0",
     "node-sass": "4.9.3",
     "perfect-scrollbar": "1.4.0",
     "qrcode.react": "^0.9.3",
@@ -59,7 +59,7 @@
     "ajv": "6.0.0",
     "@types/googlemaps": "3.30.13",
     "@types/markerclustererplus": "2.1.33",
-    "jquery": "3.3.1"
+    "jquery": "3.5.0"
   },
   "description": "This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).",
   "main": ".eslintrc.js",
